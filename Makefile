@@ -13,7 +13,7 @@ SRC			=	inet.c \
 				ptr_tab.c \
 				clean_tab.c
 
-SRCCLIENT		=
+SRCCLIENT		=	client/main.c
 
 SRCSERVER	=	server/main.c
 
