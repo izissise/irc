@@ -5,19 +5,20 @@
 // Login   <dellam_a@epitech.net>
 //
 // Started on  Mon Apr 14 14:57:36 2014
-// Last update Mon Apr 14 18:16:04 2014 
+// Last update Mon Apr 14 18:44:01 2014 
 //
 
 #ifndef _WINDOW_HPP_
 # define _WINDOW_HPP_
 
+# include <QMainWindow>
 # include <QApplication>
-# include <QPushButton>
-# include <QGridLayout>
-# include <QLineEdit>
-# include <QTextEdit>
+# include <QAction>
+# include <QMenuBar>
+# include <QMenu>
+# include "widget.hpp"
 
-class Window : public QWidget
+class Window : public QMainWindow
 {
   Q_OBJECT
 
@@ -25,15 +26,8 @@ public:
   Window();
   virtual ~Window();
 
-public slots:
-  void displayText();
-
 private:
-  QGridLayout	*_layout;
-  QTextEdit	*_msg;
-  QTextEdit	*_person;
-  QLineEdit	*_text;
-  QPushButton	*_send;
+  Widget	_win;
 };
 
 #endif /* _WINDOW_HPP_ */
