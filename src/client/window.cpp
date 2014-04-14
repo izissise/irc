@@ -5,7 +5,7 @@
 // Login   <dellam_a@epitech.net>
 //
 // Started on  Mon Apr 14 14:58:36 2014
-// Last update Mon Apr 14 18:46:38 2014 
+// Last update Mon Apr 14 19:05:32 2014 
 //
 
 #include <iostream>
@@ -15,11 +15,14 @@ Window::Window(): QMainWindow(), _win()
 {
   QMenu *file = menuBar()->addMenu("&Files");
   QAction *quit = new QAction("&Quit", this);
+  QAction *join = new QAction("&Join a New Channel", this);
 
   resize(800, 600);
   setWindowTitle("Client");
   quit->setShortcut(QKeySequence("Ctrl+Q"));
+  join->setShortcut(QKeySequence("Ctrl+J"));
   connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+  file->addAction(join);
   file->addAction(quit);
   setCentralWidget(&_win);
 }

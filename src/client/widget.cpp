@@ -5,7 +5,7 @@
 // Login   <dellam_a@epitech.net>
 //
 // Started on  Mon Apr 14 18:18:15 2014
-// Last update Mon Apr 14 18:29:14 2014 
+// Last update Mon Apr 14 19:05:01 2014 
 //
 
 #include <iostream>
@@ -13,16 +13,16 @@
 
 Widget::Widget(): QWidget()
 {
-  // resize(800, 600);
-  // setWindowTitle("Client");
-
   _layout = new QGridLayout();
   _text = new QLineEdit(this);
   _msg = new QTextEdit(this);
   _person = new QTextEdit(this);
   _send = new QPushButton("Send", this);
 
+  _msg->setReadOnly(true);
+  _person->setReadOnly(true);
   QObject::connect(_send, SIGNAL(clicked()), this, SLOT(displayText()));
+  QObject::connect(_text, SIGNAL(returnPressed()), this, SLOT(displayText()));
   _layout->addWidget(_msg, 0, 0, 2, 2);
   _layout->addWidget(_person, 0, 2, 3, 1);
   _layout->addWidget(_text, 2, 0);
@@ -43,4 +43,5 @@ Widget::~Widget()
 void	Widget::displayText()
 {
   std::cout << _text->displayText().toStdString() << std::endl;
+  _text->clear();
 }
