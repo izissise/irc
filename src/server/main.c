@@ -10,13 +10,25 @@
 
 #include "server.h"
 
-int	main(UNSEDP int ac, UNSEDP char **av)
+void	handle_server(t_list *watch;)
+{
+  t_net	*tmpclient;
+
+  while (1)
+    {
+      if (!(tmpclient = accept_connection(server->socket)))
+        continue ;
+
+
+    }
+}
+
+int	main(UNSEDP int ac, char **av)
 {
   t_net	*server;
-  t_net	*client;
+  t_list	*watch;
   char	*ip;
 
-  signal(SIGCHLD, SIG_IGN);
   if (!(server = create_connection(listening_ip(SERVERTYPE),
                                    av[1] ? av[1] : "22", SOCK_STREAM, &bind)))
     return (1);
@@ -27,13 +39,8 @@ int	main(UNSEDP int ac, UNSEDP char **av)
     printf("server %s:%d : waiting for connections...\n", ip,
            port_number(server));
   free(ip);
-  while (1)
-    {
-      if (!(client = accept_connection(server->socket)))
-        continue ;
-      write_sock("hello\n", client->socket, -1);
-      close_connection(client);
-    }
+  watch  = NULL;
+  handle_server(server);
   close_connection(server);
   return (0);
 }

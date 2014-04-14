@@ -10,39 +10,41 @@
 
 #include "select.h"
 
-static int	max_fd_plusone(t_selfd **fds)
+static int	max_fd_plusone(t_list *fds)
 {
   int		max;
-  int		i;
+  t_list		*tmp;
+  t_selfd		*fd;
 
-  i = 1;
-  max = fds[0]->fd;
-  while (fds[i])
+  max = -1;
+  tmp = fds;
+  while (tmp)
     {
-      max = fds[i]->fd > max ? fds[i]->fd : max;
-      ++i;
+      fd = (t_selfd*)tmp->data;
+      max = fd->fd > max ? fd->fd : max;
+      tmp = tmp->next;
     }
   return (max + 1);
 }
 
-static void	set_fdset(t_selfd **fds, fd_set *setr, fd_set *setw)
+static void	set_fdset(t_list *fds, fd_set *setr, fd_set *setw)
 {
-  int		i;
+  t_list		*tmp;
+  t_selfd		*fd;
 
-  i = 0;
   FD_ZERO(setr);
   FD_ZERO(setw);
-  while (fds[i])
+  tmp = fds;
+  while (tmp)
     {
-      if (fds[i]->type == FDREAD)
-        FD_SET(fds[i]->fd, setr);
-      else if (fds[i]->type == FDWRITE)
-        FD_SET(fds[i]->fd, setw);
-      ++i;
+      fd = (t_selfd*)tmp->data;
+      FD_SET(fd->fd, setr);
+      FD_SET(fd->fd, setw);
+      tmp = tmp->next;
     }
 }
 
-t_selfd	*create_fd(int fd, int type, void (*callback)())
+t_selfd	*create_fd(int fd, int type, void *data)
 {
   t_selfd	*res;
 
@@ -58,13 +60,13 @@ t_selfd	*create_fd(int fd, int type, void (*callback)())
 ** Return the fd which changed his state
 */
 
-t_selfd	*do_select(t_selfd **fds)
+t_selfd	*do_select(t_list *fds)
 {
   fd_set		setr;
   fd_set		setw;
-  int		i;
+  t_list		*tmp;
+  t_selfd		*fd;
 
-  i = 0;
   set_fdset(fds, &setr, &setw);
   while ((select(max_fd_plusone(fds), &setr, &setw, NULL, NULL) == -1)
          && (errno != EINTR))
@@ -72,11 +74,16 @@ t_selfd	*do_select(t_selfd **fds)
       perror("Select");
       return (NULL);
     }
-  while (fds[i])
+  tmp = fds;
+  while (tmp)
     {
-      if (FD_ISSET(fds[i]->fd, &setr) || FD_ISSET(fds[i]->fd, &setw))
-        return (fds[i]);
-      ++i;
+      fd = (t_selfd*)tmp->data;
+      if (FD_ISSET(fd->fd, &setr) || FD_ISSET(fd->fd, &setw))
+        {
+          fd->type = FD_ISSET(fd->fd, &setr) ? FDREAD : FDWRITE;
+          return (fd);
+        }
+      tmp = tmp->next;
     }
   return (NULL);
 }

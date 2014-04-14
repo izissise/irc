@@ -17,6 +17,8 @@
 # include <fcntl.h>
 # include <errno.h>
 
+# include "liste.h"
+
 # define FDREAD 0
 # define FDWRITE 1
 
@@ -24,10 +26,10 @@ typedef struct	s_selfd
 {
   int		fd;
   int		type;
-  void		(*callback)();
+  void		*data;
 }		t_selfd;
 
-t_selfd	*do_select(t_selfd **fds);
-t_selfd	*create_fd(int fd, int type, void (*callback)());
+t_selfd	*do_select(t_selfd *fds);
+t_selfd	*create_fd(int fd, int type, void *data);
 
 #endif /* !SELECT_H_INCLUDED */
