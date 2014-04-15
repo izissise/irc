@@ -5,7 +5,7 @@
 // Login   <dellam_a@epitech.net>
 //
 // Started on  Mon Apr 14 18:18:15 2014
-// Last update Mon Apr 14 19:05:01 2014 
+// Last update Tue Apr 15 00:02:59 2014 
 //
 
 #include <iostream>
@@ -19,6 +19,8 @@ Widget::Widget(): QWidget()
   _person = new QTextEdit(this);
   _send = new QPushButton("Send", this);
 
+  _person->setFixedWidth(120);
+  _send->setFixedWidth(75);
   _msg->setReadOnly(true);
   _person->setReadOnly(true);
   QObject::connect(_send, SIGNAL(clicked()), this, SLOT(displayText()));
