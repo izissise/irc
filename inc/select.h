@@ -27,10 +27,10 @@ typedef struct	s_selfd
   int		fd;
   int		type;
   void		*data;
-  void		(*callback)();
+  void		(*callback)(struct s_selfd *this);
 }		t_selfd;
 
-t_selfd	*do_select(t_selfd *fds);
-t_selfd	*create_fd(int fd, int type, void *data, void (*call)());
+t_selfd	*do_select(t_list *fds, int check_write);
+t_selfd	*create_fd(int fd, void *data, void (*call)());
 
 #endif /* !SELECT_H_INCLUDED */

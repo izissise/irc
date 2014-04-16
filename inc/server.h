@@ -17,7 +17,14 @@
 # include "include.h"
 # include "network.h"
 # include "select.h"
+# include "liste.h"
 
-void	handle_server(t_list *watch);
+typedef struct	s_server
+{
+  t_list		*watch;
+}		t_server;
+
+void	handle_server(t_server *serv);
+void	handle_newconnection(t_selfd *fd, t_server *serv);
 
 #endif /* !SERVER_H_INCLUDED */

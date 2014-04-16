@@ -10,9 +10,20 @@
 
 #include "server.h"
 
-void	handle_server(t_list *watch)
+void	handle_newconnection(t_selfd *fd, t_server *serv)
 {
+  t_net	*sock;
+  t_net	*nclient;
 
-//      if (!(tmpclient = accept_connection(server->socket)))
-//        continue ;
+  sock = (t_net*)fd->data;
+  if (!(nclient = accept_connection(sock->socket)))
+    return ;
+  add_to_list(&(serv->watch), create_fd(nclient->socket,
+                                        &nclient, NULL));
+  printf("qdqsd\n");
+}
+
+void	handle_server(t_server *serv)
+{
+  do_select(serv->watch, 0);
 }

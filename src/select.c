@@ -44,14 +44,14 @@ static void	set_fdset(t_list *fds, fd_set *setr, fd_set *setw)
     }
 }
 
-t_selfd	*create_fd(int fd, int type, void *data, void (*call)())
+t_selfd	*create_fd(int fd, void *data, void (*call)())
 {
   t_selfd	*res;
 
   if ((res = malloc(1 * sizeof(t_selfd))) == NULL)
     return (NULL);
   res->fd = fd;
-  res->type = type;
+  res->data = data;
   res->callback = call;
   return (res);
 }
@@ -60,7 +60,7 @@ t_selfd	*create_fd(int fd, int type, void *data, void (*call)())
 ** Return the fd which changed his state
 */
 
-t_selfd	*do_select(t_list *fds)
+t_selfd	*do_select(t_list *fds, int check_write)
 {
   fd_set		setr;
   fd_set		setw;
@@ -68,7 +68,8 @@ t_selfd	*do_select(t_list *fds)
   t_selfd		*fd;
 
   set_fdset(fds, &setr, &setw);
-  while ((select(max_fd_plusone(fds), &setr, &setw, NULL, NULL) == -1)
+  while ((select(max_fd_plusone(fds), &setr, check_write ? &setw : NULL
+                 , NULL, NULL) == -1)
          && (errno != EINTR))
     {
       perror("Select");
@@ -78,7 +79,7 @@ t_selfd	*do_select(t_list *fds)
   while (tmp)
     {
       fd = (t_selfd*)tmp->data;
-      if (FD_ISSET(fd->fd, &setr) || FD_ISSET(fd->fd, &setw))
+      if (FD_ISSET(fd->fd, &setr) || (check_write && FD_ISSET(fd->fd, &setw)))
         {
           fd->type = FD_ISSET(fd->fd, &setr) ? FDREAD : FDWRITE;
           return (fd);

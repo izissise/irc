@@ -34,10 +34,10 @@ void	sig_handler(int sig)
     }
 }
 
-void	do_server()
+void		do_server()
 {
-  t_list	*watch;
-  char	*ip[2];
+  t_server	serv;
+  char		*ip[2];
 
   ip[0] = get_ip_addr(g_server4);
   ip[1] = get_ip_addr(g_server6);
@@ -46,9 +46,13 @@ void	do_server()
            ip[0], port_number(g_server4), ip[1], port_number(g_server6));
   free(ip[0]);
   free(ip[1]);
-  watch  = NULL;
+  serv.watch  = NULL;
+  add_to_list(&(serv.watch), create_fd(g_server4->socket,
+                                       &g_server4, &handle_newconnection));
+  add_to_list(&(serv.watch), create_fd(g_server6->socket,
+                                       &g_server6, &handle_newconnection));
   while (!quit)
-    handle_server(watch);
+    handle_server(&serv);
 }
 
 int	quit_server_err()
@@ -79,7 +83,7 @@ int	main(UNSEDP int ac, char **av)
       return (quit_server_err());
     }
   do_server();
-  close_connection(g_server4);
-  close_connection(g_server6);
+//  close_connection(g_server4);
+//  close_connection(g_server6);
   return (0);
 }
