@@ -8,7 +8,6 @@
 ** Last update Thu Dec 13 13:14:01 2012 Hugues
 */
 
-#include <stdlib.h>
 #include "liste.h"
 
 int	list_size(t_list *begin)
@@ -24,7 +23,7 @@ int	list_size(t_list *begin)
   return (i);
 }
 
-void	rm_from_list(t_list **begin, t_list *trm, int (*f)(void*))
+void	rm_from_list(t_list **begin, t_list *trm, void (*f)(void*))
 {
   if (begin != NULL)
     {
@@ -52,7 +51,7 @@ void		apply_on_list(t_list *begin,
     }
 }
 
-void	rm_list(t_list *begin, int (*f)(void*))
+void	rm_list(t_list *begin, void (*f)(void*))
 {
   if (begin != NULL)
     {

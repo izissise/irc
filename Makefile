@@ -13,7 +13,8 @@ SRC			=	inet.c \
 				ptr_tab.c \
 				clean_tab.c \
 				select.c \
-				liste.c
+				liste.c \
+				liste_find.c
 
 SRCCLIENT		=	client/main.c
 
