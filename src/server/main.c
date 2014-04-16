@@ -10,14 +10,16 @@
 
 #include "server.h"
 
-void	handle_server(t_list *watch;)
+
+
+void	handle_server(t_list *watch)
 {
   t_net	*tmpclient;
 
   while (1)
     {
-      if (!(tmpclient = accept_connection(server->socket)))
-        continue ;
+//      if (!(tmpclient = accept_connection(server->socket)))
+//        continue ;
 
 
     }
@@ -29,8 +31,9 @@ int	main(UNSEDP int ac, char **av)
   t_list	*watch;
   char	*ip;
 
-  if (!(server = create_connection(listening_ip(SERVERTYPE),
-                                   av[1] ? av[1] : "22", SOCK_STREAM, &bind)))
+  signal(SIGPIPE, SIG_IGN);
+  if (!(server = create_connection(listening(SERVERTYPE), av[1] ? av[1]
+                                   : "6667", SOCK_STREAM, &bind)))
     return (1);
   if (listen(server->socket, MAX_CLIENTS) == -1)
     perror("listen");
@@ -40,6 +43,7 @@ int	main(UNSEDP int ac, char **av)
            port_number(server));
   free(ip);
   watch  = NULL;
+
   handle_server(server);
   close_connection(server);
   return (0);

@@ -39,7 +39,7 @@ void		close_connection(t_net *net);
 t_net	*accept_connection(int sockfd);
 char		*get_ip_addr(t_net *net);
 t_net	*peer(t_net *net);
-const char	*listening_ip(int domain);
+const char	*listening(int domain);
 int		port_number(t_net *net);
 
 void	write_sock(const char *str, int socket, int strlen);

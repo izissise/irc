@@ -10,7 +10,7 @@
 
 #include "network.h"
 
-const char	*listening_ip(int domain)
+const char	*listening(int domain)
 {
   if (domain == AF_INET)
     return ("0.0.0.0");

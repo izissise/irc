@@ -16,6 +16,7 @@ int	main(int ac, char **av)
   char	buff[BUFSIZ];
   int	tmp;
 
+  signal(SIGPIPE, SIG_IGN);
   if (ac != 3)
     return (1);
   if (!(client = create_connection(av[1], av[2], SOCK_STREAM, &connect)))

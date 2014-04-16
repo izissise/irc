@@ -44,7 +44,7 @@ static void	set_fdset(t_list *fds, fd_set *setr, fd_set *setw)
     }
 }
 
-t_selfd	*create_fd(int fd, int type, void *data)
+t_selfd	*create_fd(int fd, int type, void *data, void (*call)())
 {
   t_selfd	*res;
 
@@ -52,7 +52,7 @@ t_selfd	*create_fd(int fd, int type, void *data)
     return (NULL);
   res->fd = fd;
   res->type = type;
-  res->callback = callback;
+  res->callback = call;
   return (res);
 }
 
