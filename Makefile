@@ -16,7 +16,8 @@ SRC			=	inet.c \
 
 SRCCLIENT		=	client/main.c
 
-SRCSERVER	=	server/main.c
+SRCSERVER	=	server/main.c \
+			server/handle_server.c
 
 SRCCLIENT	+=	$(SRC)
 SRCSERVER	+=	$(SRC)

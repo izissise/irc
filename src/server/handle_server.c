@@ -8,16 +8,11 @@
 ** Last update Mon Oct  8 16:20:21 2012 hugues morisset
 */
 
-#ifndef SERVER_H_INCLUDED
-# define SERVER_H_INCLUDED
+#include "server.h"
 
-# include <signal.h>
-# include <string.h>
+void	handle_server(t_list *watch)
+{
 
-# include "include.h"
-# include "network.h"
-# include "select.h"
-
-void	handle_server(t_list *watch);
-
-#endif /* !SERVER_H_INCLUDED */
+//      if (!(tmpclient = accept_connection(server->socket)))
+//        continue ;
+}

@@ -10,41 +10,73 @@
 
 #include "server.h"
 
+static t_net	*g_server4;
+static t_net	*g_server6;
+static int	quit;
 
-
-void	handle_server(t_list *watch)
+void	sig_handler(int sig)
 {
-  t_net	*tmpclient;
-
-  while (1)
+  if (sig == SIGQUIT || sig == SIGINT || sig == SIGTERM)
     {
-//      if (!(tmpclient = accept_connection(server->socket)))
-//        continue ;
-
-
+      if (g_server4)
+        {
+          if (g_server4->socket != -1)
+            close(g_server4->socket);
+          g_server4->socket = -1;
+        }
+      if (g_server6)
+        {
+          if (g_server6->socket != -1)
+            close(g_server6->socket);
+          g_server6->socket = -1;
+        }
+      quit = 1;
     }
 }
 
 int	main(UNSEDP int ac, char **av)
 {
-  t_net	*server;
   t_list	*watch;
-  char	*ip;
+  char	*ip[2];
 
+  g_server4 = NULL;
+  g_server6 = NULL;
+  quit = 0;
   signal(SIGPIPE, SIG_IGN);
-  if (!(server = create_connection(listening(SERVERTYPE), av[1] ? av[1]
-                                   : "6667", SOCK_STREAM, &bind)))
+  signal(SIGINT, &sig_handler);
+  signal(SIGQUIT, &sig_handler);
+  signal(SIGTERM, &sig_handler);
+  if (!(g_server4 = create_connection(listening(AF_INET), av[1] ? av[1]
+                                      : "6667", SOCK_STREAM, &bind)))
     return (1);
-  if (listen(server->socket, MAX_CLIENTS) == -1)
-    perror("listen");
-  ip = get_ip_addr(server);
-  if (ip)
-    printf("server %s:%d : waiting for connections...\n", ip,
-           port_number(server));
-  free(ip);
+  if (listen(g_server4->socket, MAX_CLIENTS) == -1)
+    {
+      perror("listen");
+      close_connection(g_server4);
+    }
+  if (!(g_server6 = create_connection(listening(AF_INET6), av[1] ? av[1]
+                                      : "6667", SOCK_STREAM, &bind)))
+    {
+      close_connection(g_server4);
+      return (1);
+    }
+  if (listen(g_server4->socket, MAX_CLIENTS) == -1)
+    {
+      perror("listen");
+      close_connection(g_server4);
+      close_connection(g_server6);
+    }
+  ip[0] = get_ip_addr(g_server4);
+  ip[1] = get_ip_addr(g_server6);
+  if (ip[0] && ip[1])
+    printf("server waiting for connections on:\n %s:%d\n %s:%d\n",
+           ip[0], port_number(g_server4), ip[1], port_number(g_server6));
+  free(ip[0]);
+  free(ip[1]);
   watch  = NULL;
-
-  handle_server(server);
-  close_connection(server);
+  while (!quit)
+    handle_server(watch);
+  close_connection(g_server4);
+  close_connection(g_server6);
   return (0);
 }
