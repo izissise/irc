@@ -34,38 +34,11 @@ void	sig_handler(int sig)
     }
 }
 
-int	main(UNSEDP int ac, char **av)
+void	do_server()
 {
   t_list	*watch;
   char	*ip[2];
 
-  g_server4 = NULL;
-  g_server6 = NULL;
-  quit = 0;
-  signal(SIGPIPE, SIG_IGN);
-  signal(SIGINT, &sig_handler);
-  signal(SIGQUIT, &sig_handler);
-  signal(SIGTERM, &sig_handler);
-  if (!(g_server4 = create_connection(listening(AF_INET), av[1] ? av[1]
-                                      : "6667", SOCK_STREAM, &bind)))
-    return (1);
-  if (listen(g_server4->socket, MAX_CLIENTS) == -1)
-    {
-      perror("listen");
-      close_connection(g_server4);
-    }
-  if (!(g_server6 = create_connection(listening(AF_INET6), av[1] ? av[1]
-                                      : "6667", SOCK_STREAM, &bind)))
-    {
-      close_connection(g_server4);
-      return (1);
-    }
-  if (listen(g_server4->socket, MAX_CLIENTS) == -1)
-    {
-      perror("listen");
-      close_connection(g_server4);
-      close_connection(g_server6);
-    }
   ip[0] = get_ip_addr(g_server4);
   ip[1] = get_ip_addr(g_server6);
   if (ip[0] && ip[1])
@@ -76,6 +49,36 @@ int	main(UNSEDP int ac, char **av)
   watch  = NULL;
   while (!quit)
     handle_server(watch);
+}
+
+int	quit_server_err()
+{
+  close_connection(g_server4);
+  close_connection(g_server6);
+  return (1);
+}
+
+int	main(UNSEDP int ac, char **av)
+{
+  g_server4 = NULL;
+  g_server6 = NULL;
+  quit = 0;
+  signal(SIGPIPE, SIG_IGN);
+  signal(SIGINT, &sig_handler);
+  signal(SIGQUIT, &sig_handler);
+  signal(SIGTERM, &sig_handler);
+  if (!(g_server4 = create_connection(listening(AF_INET), av[1] ? av[1]
+                                      : "6667", SOCK_STREAM, &bind))
+      || !(g_server6 = create_connection(listening(AF_INET6), av[1] ? av[1]
+                                         : "6667", SOCK_STREAM, &bind)))
+    return (quit_server_err());
+  if (listen(g_server4->socket, MAX_CLIENTS) == -1
+      || listen(g_server6->socket, MAX_CLIENTS) == -1)
+    {
+      perror("listen");
+      return (quit_server_err());
+    }
+  do_server();
   close_connection(g_server4);
   close_connection(g_server6);
   return (0);
