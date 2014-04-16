@@ -48,9 +48,9 @@ void		do_server()
   free(ip[1]);
   serv.watch  = NULL;
   add_to_list(&(serv.watch), create_fd(g_server4->socket,
-                                       &g_server4, &handle_newconnection));
+                                       g_server4, &handle_newconnection));
   add_to_list(&(serv.watch), create_fd(g_server6->socket,
-                                       &g_server6, &handle_newconnection));
+                                       g_server6, &handle_newconnection));
   while (!quit)
     handle_server(&serv);
 }

@@ -10,6 +10,14 @@
 
 #include "server.h"
 
+void	client_stuff(t_selfd *fd, t_server *serv)
+{
+  t_net	*sock;
+  t_net	*nclient;
+
+  sock = (t_net*)fd->data;
+}
+
 void	handle_newconnection(t_selfd *fd, t_server *serv)
 {
   t_net	*sock;
@@ -20,10 +28,15 @@ void	handle_newconnection(t_selfd *fd, t_server *serv)
     return ;
   add_to_list(&(serv->watch), create_fd(nclient->socket,
                                         &nclient, NULL));
-  printf("qdqsd\n");
 }
 
-void	handle_server(t_server *serv)
+void		handle_server(t_server *serv)
 {
-  do_select(serv->watch, 0);
+  t_selfd	*event;
+
+  if ((event = do_select(serv->watch, 0)))
+    {
+      if (event->callback)
+        event->callback(event, serv);
+    }
 }

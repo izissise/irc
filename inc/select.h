@@ -27,7 +27,7 @@ typedef struct	s_selfd
   int		fd;
   int		type;
   void		*data;
-  void		(*callback)(struct s_selfd *this);
+  void		(*callback)(struct s_selfd *this, void *data);
 }		t_selfd;
 
 t_selfd	*do_select(t_list *fds, int check_write);

@@ -28,7 +28,7 @@ CC		=	gcc
 RM		=	rm -f
 
 CLIENT		=	client
-SERVER		=	server
+SERVER		=	serveur
 NAME		=	my_irc
 
 OBJDIR		=	obj/
