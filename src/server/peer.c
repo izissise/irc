@@ -10,6 +10,11 @@
 
 #include "server.h"
 
+void	handle_peer(t_peer *peer, t_selfd *fd, t_server *serv, char *buff)
+{
+
+}
+
 t_peer	*create_peer(t_net *sock)
 {
   t_peer	*res;
@@ -17,6 +22,5 @@ t_peer	*create_peer(t_net *sock)
   if ((res = malloc(1 * sizeof(t_peer))) == NULL)
     return (NULL);
   res->sock = sock;
-  res->need_write = 1;
   return (res);
 }

@@ -34,5 +34,6 @@ void	handle_newconnection(t_selfd *fd, t_server *serv);
 
 t_peer	*create_peer(t_net *sock);
 void		close_client_connection(void *d);
+void		handle_peer(t_peer *peer, t_selfd *fd, t_server *serv, char *buff);
 
 #endif /* !SERVER_H_INCLUDED */
