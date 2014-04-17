@@ -17,8 +17,9 @@ void	client_stuff(t_selfd *fd, t_server *serv)
   char	buff[BUFSIZ];
 
   client = (t_peer*)fd->data;
-  if ((fd->type == FDREAD) && ((tmp = read(fd->fd, buff, sizeof(buff))) > 0))
+  if ((fd->type == FDREAD) && ((tmp = read(fd->fd, buff, sizeof(buff) - 1)) > 0))
     {
+      buff[tmp] = '\0';
       write_sock(buff, 1, -1);
       client->need_write = 1;
     }
@@ -28,11 +29,20 @@ void	client_stuff(t_selfd *fd, t_server *serv)
       client->need_write = 0;
     }
   else
-    {
-      close_connection(client->sock);
-      free(client);
-      rm_from_list(&(serv->watch), find_in_list(serv->watch, fd), &free);
-    }
+    rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
+                 &close_client_connection);
+}
+
+void		close_client_connection(void *d)
+{
+  t_selfd	*fd;
+  t_peer	*client;
+
+  fd = (t_selfd*)d;
+  if ((client = (t_peer*)fd->data))
+    close_connection(client->sock);
+  free(client);
+  free(fd);
 }
 
 void		handle_newconnection(t_selfd *fd, t_server *serv)

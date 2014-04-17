@@ -38,6 +38,7 @@ void		do_server()
 {
   t_server	serv;
   char		*ip[2];
+  t_selfd	*fd[2];
 
   ip[0] = get_ip_addr(g_server4);
   ip[1] = get_ip_addr(g_server6);
@@ -47,12 +48,15 @@ void		do_server()
   free(ip[0]);
   free(ip[1]);
   serv.watch  = NULL;
-  add_to_list(&(serv.watch), create_fd(g_server4->socket,
-                                       g_server4, &handle_newconnection));
-  add_to_list(&(serv.watch), create_fd(g_server6->socket,
-                                       g_server6, &handle_newconnection));
+  fd[0] = create_fd(g_server4->socket, g_server4, &handle_newconnection);
+  fd[1] = create_fd(g_server6->socket, g_server6, &handle_newconnection);
+  add_to_list(&(serv.watch), fd[0]);
+  add_to_list(&(serv.watch), fd[1]);
   while (!quit)
     handle_server(&serv);
+  rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[0]), &free);
+  rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[1]), &free);
+  rm_list(serv.watch, &close_client_connection);
 }
 
 int	quit_server_err()
@@ -83,7 +87,7 @@ int	main(UNSEDP int ac, char **av)
       return (quit_server_err());
     }
   do_server();
-//  close_connection(g_server4);
-//  close_connection(g_server6);
+  free(g_server4);
+  free(g_server6);
   return (0);
 }

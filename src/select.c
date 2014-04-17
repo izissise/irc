@@ -69,10 +69,10 @@ t_selfd	*do_select(t_list *fds, int check_write)
 
   set_fdset(fds, &setr, &setw);
   while ((select(max_fd_plusone(fds), &setr, check_write ? &setw : NULL
-                 , NULL, NULL) == -1)
-         && (errno != EINTR))
+                 , NULL, NULL) == -1))
     {
-      perror("Select");
+      if (errno != EINTR)
+        perror("Select");
       return (NULL);
     }
   tmp = fds;

@@ -30,7 +30,8 @@ void	rm_from_list(t_list **begin, t_list *trm, void (*f)(void*))
       if ((*begin) == trm)
         {
           (*begin) = (*begin)->next;
-          (*f)(trm->data);
+          if (f)
+            (*f)(trm->data);
           free(trm);
         }
       else
