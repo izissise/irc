@@ -13,17 +13,16 @@
 void	client_stuff(t_selfd *fd, t_server *serv)
 {
   t_peer	*client;
-  int	tmp;
-  char	buff[BUFSIZ];
 
   client = (t_peer*)fd->data;
-  if ((fd->etype == FDREAD) && ((tmp = read(fd->fd, buff, sizeof(buff))) > 0))
-    {
-      buff[tmp] = '\0';
-      handle_peer(client, fd, serv, buff);
-    }
+  if ((fd->etype == FDREAD) && ((client->bufused = read(fd->fd, client->buff,
+                                 sizeof(client->buff))) > 0))
+    handle_peer(client, fd, serv);
   else if (fd->etype == FDWRITE)
-    handle_peer(client, fd, serv, NULL);
+    {
+      handle_peer(client, fd, serv);
+      write_sock(client->buff, client->sock->socket, client->bufused);
+    }
   else
     rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
                  &close_client_connection);
@@ -71,3 +70,4 @@ void		handle_server(t_server *serv)
         event->callback(event, serv);
     }
 }
+
