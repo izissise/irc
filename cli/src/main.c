@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Thu Apr 17 14:10:30 2014 
+** Last update Thu Apr 17 15:13:55 2014 
 */
 
 #include <gtk/gtk.h>
@@ -176,3 +176,17 @@ int		main(int ac, char **av)
   gtk_main();
   return (0);
 }
+
+
+  /* t_net	*client; */
+  /* char	buff[BUFSIZ]; */
+  /* int	tmp; */
+
+  /* signal(SIGPIPE, SIG_IGN); */
+  /* if (ac != 3) */
+  /*   return (1); */
+  /* if (!(client = create_connection(av[1], av[2], SOCK_STREAM, &connect))) */
+  /*   return (1); */
+  /* while ((tmp = read(client->socket, buff, sizeof(buff))) > 0) */
+  /*   write(1, buff, tmp); */
+  /* close_connection(client); */
