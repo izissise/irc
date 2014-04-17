@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Thu Apr 17 13:02:26 2014 
+** Last update Thu Apr 17 14:10:30 2014 
 */
 
 #include <gtk/gtk.h>
@@ -112,6 +112,9 @@ void		create_gui(GtkWidget *win)
   gtk_container_add (GTK_CONTAINER (win), all_widget);
   gtk_box_pack_start(GTK_BOX(all_widget), menu_vbox, FALSE, FALSE, 0);
 
+
+
+
   /* Create the message view */
   /* box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); */
   /* box = gtk_alignment_new(0, 0, 1, 1); */
@@ -125,33 +128,36 @@ void		create_gui(GtkWidget *win)
   gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_ETCHED_OUT);
   /* gtk_container_add (GTK_CONTAINER(box), frame); */
   /* gtk_grid_attach (GTK_GRID(grid), frame, 0, 0, 10, 10); */
-  gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+  /* gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0); */
+  gtk_grid_attach (GTK_GRID(grid), frame, 0, 0, 10, 10);
   /* gtk_grid_attach (GTK_GRID(grid), box, 0, 0, 10, 10); */
 
   /* Create the client view */
-  box = gtk_alignment_new(0, 1, 0.5, 1);
+  /* box = gtk_alignment_new(0, 1, 0.5, 1); */
   frame = gtk_frame_new(NULL);
   text_view = gtk_text_view_new();
   gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
-  gtk_widget_set_hexpand(text_view, TRUE);
+  /* gtk_widget_set_hexpand(text_view, TRUE); */
+  gtk_widget_set_size_request (text_view, 150, -1);
   gtk_widget_set_vexpand(text_view, TRUE);
   gtk_container_add (GTK_CONTAINER(frame), text_view);
-  gtk_container_add (GTK_CONTAINER(box), frame);
-  gtk_box_pack_start(GTK_BOX(vbox), box, TRUE, TRUE, 0);
+  gtk_grid_attach (GTK_GRID(grid), frame, 10, 0, 10, 1);
+  /* gtk_container_add (GTK_CONTAINER(box), frame); */
+ /* gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, FALSE, 0); */
   /* gtk_container_set_border_width(GTK_CONTAINER(box), 5); */
 
-  gtk_box_set_spacing (GTK_BOX(vbox), 5);
   /* gtk_grid_attach (GTK_GRID(grid), box, 11, 0, 10, 1); */
-  gtk_grid_attach (GTK_GRID(grid), vbox, 0, 0, 11, 10);
+  /* gtk_grid_attach (GTK_GRID(grid), vbox, 0, 0, 9, 9); */
 
   /* Create the input line */
   text_bar = gtk_entry_new();
   gtk_widget_set_hexpand(text_bar, TRUE);
   /* gtk_box_pack_start(GTK_BOX(all_widget), text_bar, TRUE, FALSE, 0); */
-  gtk_grid_attach (GTK_GRID(grid), text_bar, 0, 11, 1, 10);
+  gtk_grid_attach (GTK_GRID(grid), text_bar, 0, 10, 1, 10);
   set_completion_mod(text_bar);
 
   gtk_grid_set_row_spacing (GTK_GRID(grid), 3);
+  /* gtk_grid_set_column_spacing (GTK_GRID(grid), 2); */
   gtk_box_pack_start(GTK_BOX(all_widget), grid, TRUE, TRUE, 0);
 
   /* gtk_grid_set_column_spacing(GTK_GRID(grid), 10); */
