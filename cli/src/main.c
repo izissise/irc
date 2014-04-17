@@ -5,17 +5,25 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Thu Apr 17 16:05:00 2014 
+** Last update Thu Apr 17 22:35:09 2014 
 */
 
 #include <gtk/gtk.h>
+#include "gui.h"
 
-void print_hello(GtkWidget *widget, gpointer data)
+void	entry_function(GtkEntry *entry, gpointer user_data)
 {
-  printf("Hello World\n");
+  printf("ENTRY = %s\n", gtk_entry_get_text (GTK_ENTRY(entry)));
+  gtk_entry_set_text(entry, "");
 }
 
-GtkWidget	*create_menubar()
+void	button_function(GtkButton *button, gpointer user_data)
+{
+  printf("BUTTON = %s\n", gtk_entry_get_text (GTK_ENTRY((((t_window *)user_data))->entry)));
+  gtk_entry_set_text((GTK_ENTRY((((t_window *)user_data))->entry)), "");
+}
+
+GtkWidget	*create_menubar(t_window *client)
 {
   GtkWidget	*menu;
   GtkWidget	*menu_vbox;
@@ -38,8 +46,7 @@ GtkWidget	*create_menubar()
   gtk_menu_shell_append(GTK_MENU_SHELL(submenu), quit);
   gtk_menu_shell_append(GTK_MENU_SHELL(menu), tmp);
   gtk_box_pack_start(GTK_BOX(menu_vbox), menu, FALSE, FALSE, 3);
-  g_signal_connect(G_OBJECT(quit), "activate",
-		   G_CALLBACK(gtk_main_quit), NULL);
+  g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(gtk_main_quit), NULL);
   return (menu_vbox);
 }
 
@@ -64,13 +71,20 @@ GtkTreeModel	*create_completion_model()
   int		i;
   GtkListStore	*list;
   GtkTreeIter	it  ;
-  char		*cmd[2];
+  char		*cmd[9];
 
   i = 0;
-  cmd[0] = "/msg";
-  cmd[1] = "/toto";
+  cmd[0] = "/server";
+  cmd[1] = "/nick";
+  cmd[2] = "/list";
+  cmd[3] = "/join";
+  cmd[4] = "/part";
+  cmd[5] = "/users";
+  cmd[6] = "/msg";
+  cmd[7] = "/send_file";
+  cmd[8] = "/accept_file";
   list = gtk_list_store_new (1, G_TYPE_STRING);
-  while (i < 2)
+  while (i < 9)
     {
       gtk_list_store_append(list, &it);
       gtk_list_store_set(list, &it, 0, cmd[i], -1);
@@ -93,52 +107,49 @@ void			set_completion_mod(GtkWidget *entry)
   gtk_entry_completion_set_text_column (completion, 0);
 }
 
-void		create_gui(GtkWidget *win)
+void		create_gui(GtkWidget *win, t_window *client)
 {
   GtkWidget	*grid;
   GtkWidget	*box;
   GtkWidget	*button;
-  GtkWidget	*vbox;
   GtkWidget	*frame;
-  GtkWidget	*text_view;
-  GtkWidget	*text_bar;
   GtkWidget	*menu_vbox;
   GtkWidget	*all_widget;
 
   /* Here we construct the container that is going pack the Widget */
   grid = gtk_grid_new ();
-  menu_vbox = create_menubar();
-  vbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  menu_vbox = create_menubar(client);
   all_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (win), all_widget);
   gtk_box_pack_start(GTK_BOX(all_widget), menu_vbox, FALSE, FALSE, 0);
 
   /* Create the message view */
   frame = gtk_frame_new(NULL);
-  text_view = gtk_text_view_new();
-  gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
-  gtk_widget_set_hexpand(text_view, TRUE);
-  gtk_widget_set_vexpand(text_view, TRUE);
-  gtk_container_add (GTK_CONTAINER(frame), text_view);
+  client->msg = gtk_text_view_new();
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(client->msg), FALSE);
+  gtk_widget_set_hexpand(client->msg, TRUE);
+  gtk_widget_set_vexpand(client->msg, TRUE);
+  gtk_container_add (GTK_CONTAINER(frame), client->msg);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 2);
   gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_ETCHED_OUT);
   gtk_grid_attach (GTK_GRID(grid), frame, 0, 0, 10, 10);
 
   /* Create the client view */
   frame = gtk_frame_new(NULL);
-  text_view = gtk_text_view_new();
-  gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
-  gtk_widget_set_size_request (text_view, 150, -1);
-  gtk_widget_set_vexpand(text_view, TRUE);
+  client->other_client = gtk_text_view_new();
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(client->other_client), FALSE);
+  gtk_widget_set_size_request (client->other_client, 150, -1);
+  gtk_widget_set_vexpand(client->other_client, TRUE);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 2);
-  gtk_container_add (GTK_CONTAINER(frame), text_view);
+  gtk_container_add (GTK_CONTAINER(frame), client->other_client);
   gtk_grid_attach (GTK_GRID(grid), frame, 10, 0, 10, 1);
 
   /* Create the input line */
-  text_bar = gtk_entry_new();
-  gtk_widget_set_hexpand(text_bar, TRUE);
-  gtk_grid_attach (GTK_GRID(grid), text_bar, 0, 10, 1, 10);
-  set_completion_mod(text_bar);
+  client->entry = gtk_entry_new();
+  gtk_widget_set_hexpand(client->entry, TRUE);
+  gtk_grid_attach (GTK_GRID(grid), client->entry, 0, 10, 1, 10);
+  set_completion_mod(client->entry);
+  g_signal_connect(client->entry, "activate", G_CALLBACK (entry_function), NULL);
 
   /* Create Send Button */
 
@@ -148,6 +159,7 @@ void		create_gui(GtkWidget *win)
   gtk_container_set_border_width(GTK_CONTAINER(box), 2);
   gtk_container_add (GTK_CONTAINER(box), button);
   gtk_grid_attach (GTK_GRID(grid), box, 10, 10, 1, 1);
+  g_signal_connect(button, "clicked", G_CALLBACK (button_function), client);
 
   gtk_box_pack_start(GTK_BOX(all_widget), grid, TRUE, TRUE, 0);
 }
@@ -155,25 +167,26 @@ void		create_gui(GtkWidget *win)
 int		main(int ac, char **av)
 {
   GtkWidget	*win;
+  t_window	client;
 
+  /* if (ac != 3) */
+  /*   return (1); */
+  /* if (!(client.socket_data = create_connection(av[1], av[2],
+     SOCK_STREAM, &connect))) */
+  /*   return (1); */
+  signal(SIGPIPE, SIG_IGN);
   gtk_init(&ac, &av);
   win = init_windows("Gtk Client", 800, 600);
-  create_gui(win);
+  create_gui(win, &client);
   gtk_widget_show_all(win);
   gtk_main();
   return (0);
 }
 
-
   /* t_net	*client; */
   /* char	buff[BUFSIZ]; */
   /* int	tmp; */
 
-  /* signal(SIGPIPE, SIG_IGN); */
-  /* if (ac != 3) */
-  /*   return (1); */
-  /* if (!(client = create_connection(av[1], av[2], SOCK_STREAM, &connect))) */
-  /*   return (1); */
   /* while ((tmp = read(client->socket, buff, sizeof(buff))) > 0) */
   /*   write(1, buff, tmp); */
   /* close_connection(client); */

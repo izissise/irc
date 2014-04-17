@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Thu Apr 17 15:16:19 2014 
+## Last update Thu Apr 17 22:16:55 2014 
 ##
 
 SRC		=	main.c
@@ -29,6 +29,8 @@ CFLAGS		+=	-I$(INCDIR) -I../utils/inc/
 CFLAGS		+=	-Wall -Wextra -Winit-self
 CFLAGS		+=	-Wunused-function -pipe -Winit-self
 CFLAGS		+=	$(GTKCFLAGS)
+
+CFLAGS		+=	-g
 
 LDFLAGS		+=	-L../utils/ -lutils
 LDFLAGS		+=	-Wl,-O1
