@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sat Mar 22 23:04:53 2014 Hugues
+## Last update Thu Apr 17 16:50:48 2014 Hugues
 ##
 
 SRC		=	main.c
@@ -15,7 +15,7 @@ FILETYPE	=	.c
 
 RM		=	rm -f
 
-NAME		=	serveur
+NAME		=	client
 
 OBJDIR		=	obj/
 SRCDIR		=	src/
@@ -47,6 +47,7 @@ $(NAME):	$(OBJ)
 		@echo -e "Linking $@ { $(LDFLAGS) }" | sed 's/^-e //' \
 		| sed 's/[-a-zA-Z]\+/\x1B[34m&\x1B[0m/g'
 		@$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
+		@cp -f $(NAME) ../$(NAME)
 
 all:	$(NAME)
 
