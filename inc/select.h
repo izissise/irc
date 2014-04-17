@@ -25,12 +25,13 @@
 typedef struct	s_selfd
 {
   int		fd;
-  int		type;
+  int		etype;
+  int		checkwrite;
   void		*data;
   void		(*callback)(struct s_selfd *this, void *data);
 }		t_selfd;
 
-t_selfd	*do_select(t_list *fds, int check_write);
+t_selfd	*do_select(t_list *fds);
 t_selfd	*create_fd(int fd, void *data, void (*call)());
 
 #endif /* !SELECT_H_INCLUDED */

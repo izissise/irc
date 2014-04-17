@@ -17,16 +17,16 @@ void	client_stuff(t_selfd *fd, t_server *serv)
   char	buff[BUFSIZ];
 
   client = (t_peer*)fd->data;
-  if ((fd->type == FDREAD) && ((tmp = read(fd->fd, buff, sizeof(buff) - 1)) > 0))
+  if ((fd->etype == FDREAD) && ((tmp = read(fd->fd, buff, sizeof(buff) - 1)) > 0))
     {
       buff[tmp] = '\0';
       write_sock(buff, 1, -1);
-      client->need_write = 1;
+      fd->checkwrite = 1;
     }
-  else if (fd->type == FDWRITE && client->need_write)
+  else if (fd->etype == FDWRITE)
     {
       write_sock("hello\n", client->sock->socket, -1);
-      client->need_write = 0;
+      fd->checkwrite = 0;
     }
   else
     rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
@@ -69,7 +69,7 @@ void		handle_server(t_server *serv)
 {
   t_selfd	*event;
 
-  if ((event = do_select(serv->watch, 0)))
+  if ((event = do_select(serv->watch)))
     {
       if (event->callback)
         event->callback(event, serv);

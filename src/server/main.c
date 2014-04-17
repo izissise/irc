@@ -57,13 +57,14 @@ void		do_server()
   rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[0]), &free);
   rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[1]), &free);
   rm_list(serv.watch, &close_client_connection);
+
 }
 
-int	quit_server_err()
+int	quit_server_err(int ret)
 {
   close_connection(g_server4);
   close_connection(g_server6);
-  return (1);
+  return (ret);
 }
 
 int	main(UNSEDP int ac, char **av)
@@ -79,15 +80,13 @@ int	main(UNSEDP int ac, char **av)
                                       : "6667", SOCK_STREAM, &bind))
       || !(g_server6 = create_connection(listening(AF_INET6), av[1] ? av[1]
                                          : "6667", SOCK_STREAM, &bind)))
-    return (quit_server_err());
+    return (quit_server_err(1));
   if (listen(g_server4->socket, MAX_CLIENTS) == -1
       || listen(g_server6->socket, MAX_CLIENTS) == -1)
     {
       perror("listen");
-      return (quit_server_err());
+      return (quit_server_err(1));
     }
   do_server();
-  free(g_server4);
-  free(g_server6);
-  return (0);
+  return (quit_server_err(0));
 }

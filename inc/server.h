@@ -27,7 +27,6 @@ typedef struct	s_server
 typedef struct	s_peer
 {
   t_net		*sock;
-  int		need_write;
 }		t_peer;
 
 void	handle_server(t_server *serv);

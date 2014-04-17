@@ -17,6 +17,6 @@ t_peer	*create_peer(t_net *sock)
   if ((res = malloc(1 * sizeof(t_peer))) == NULL)
     return (NULL);
   res->sock = sock;
-  res->need_write = 0;
+  res->need_write = 1;
   return (res);
 }
