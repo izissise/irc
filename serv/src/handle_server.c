@@ -31,11 +31,22 @@ void	client_stuff(t_selfd *fd, t_server *serv)
 void		close_client_connection(void *d)
 {
   t_selfd	*fd;
-  t_peer	*client;
+  t_peer		*client;
+  t_net		*tmp;
+  char		*ip;
 
   fd = (t_selfd*)d;
   if ((client = (t_peer*)fd->data))
-    close_connection(client->sock);
+    {
+      if ((tmp = peer(client->sock)))
+        {
+          if ((ip = get_ip_addr(tmp)))
+            printf("Client %s:%d disconnected\n", ip, port_number(tmp));
+          free(ip);
+          close_connection(tmp);
+        }
+      close_connection(client->sock);
+    }
   free(client);
   free(fd);
 }
@@ -46,6 +57,8 @@ void		handle_newconnection(t_selfd *fd, t_server *serv)
   t_peer		*client;
   t_net		*nsock;
   t_selfd	*tmpfd;
+  t_net		*tmp;
+  char		*ip;
 
   sock = (t_net*)fd->data;
   if (!(nsock = accept_connection(sock->socket)))
@@ -56,6 +69,13 @@ void		handle_newconnection(t_selfd *fd, t_server *serv)
       close_connection(nsock);
       free(client);
       return ;
+    }
+  if ((tmp = peer(nsock)))
+    {
+      if ((ip = get_ip_addr(tmp)))
+        printf("Client connected from: %s:%d\n", ip, port_number(tmp));
+      free(ip);
+      close_connection(tmp);
     }
   add_to_list(&(serv->watch), tmpfd);
 }
