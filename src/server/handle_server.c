@@ -12,31 +12,47 @@
 
 void	client_stuff(t_selfd *fd, t_server *serv)
 {
-  t_net	*sock;
-  t_list	*tmpl;
+  t_peer	*client;
   int	tmp;
   char	buff[BUFSIZ];
 
-  sock = (t_net*)fd->data;
-  write_sock("hello\n", sock->socket, -1);
-  if ((tmp = read(fd->fd, buff, sizeof(buff))) <= 0)
+  client = (t_peer*)fd->data;
+  if ((fd->type == FDREAD) && ((tmp = read(fd->fd, buff, sizeof(buff))) > 0))
     {
-      close_connection(sock);
-      tmpl = find_in_list(serv->watch, fd);
-      rm_from_list(&(serv->watch), tmpl, &free);
+      write_sock(buff, 1, -1);
+      client->need_write = 1;
+    }
+  else if (fd->type == FDWRITE && client->need_write)
+    {
+      write_sock("hello\n", client->sock->socket, -1);
+      client->need_write = 0;
+    }
+  else
+    {
+      close_connection(client->sock);
+      free(client);
+      rm_from_list(&(serv->watch), find_in_list(serv->watch, fd), &free);
     }
 }
 
-void	handle_newconnection(t_selfd *fd, t_server *serv)
+void		handle_newconnection(t_selfd *fd, t_server *serv)
 {
-  t_net	*sock;
-  t_net	*nclient;
+  t_net		*sock;
+  t_peer		*client;
+  t_net		*nsock;
+  t_selfd	*tmpfd;
 
   sock = (t_net*)fd->data;
-  if (!(nclient = accept_connection(sock->socket)))
+  if (!(nsock = accept_connection(sock->socket)))
     return ;
-  add_to_list(&(serv->watch), create_fd(nclient->socket,
-                                        nclient, &client_stuff));
+  if ((!(client = create_peer(nsock)))
+      || (!(tmpfd = create_fd(nsock->socket, client, &client_stuff))))
+    {
+      close_connection(nsock);
+      free(client);
+      return ;
+    }
+  add_to_list(&(serv->watch), tmpfd);
 }
 
 void		handle_server(t_server *serv)

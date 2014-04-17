@@ -24,7 +24,15 @@ typedef struct	s_server
   t_list		*watch;
 }		t_server;
 
+typedef struct	s_peer
+{
+  t_net		*sock;
+  int		need_write;
+}		t_peer;
+
 void	handle_server(t_server *serv);
 void	handle_newconnection(t_selfd *fd, t_server *serv);
+
+t_peer	*create_peer(t_net *sock);
 
 #endif /* !SERVER_H_INCLUDED */

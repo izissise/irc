@@ -25,7 +25,7 @@ int	list_size(t_list *begin)
 
 void	rm_from_list(t_list **begin, t_list *trm, void (*f)(void*))
 {
-  if (begin != NULL)
+  if (begin != NULL && trm != NULL)
     {
       if ((*begin) == trm)
         {
@@ -39,7 +39,7 @@ void	rm_from_list(t_list **begin, t_list *trm, void (*f)(void*))
 }
 
 void		apply_on_list(t_list *begin,
-                         int (*f)(void*, void*), void *arg)
+                      int (*f)(void*, void*), void *arg)
 {
   t_list	*list;
 
