@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sat Mar 22 23:04:53 2014 Hugues
+## Last update Thu Apr 17 15:16:19 2014 
 ##
 
 SRC		=	main.c
@@ -15,18 +15,24 @@ FILETYPE	=	.c
 
 RM		=	rm -f
 
-NAME		=	serveur
+NAME		=	client
 
 OBJDIR		=	obj/
 SRCDIR		=	src/
 INCDIR		=	inc/
 
+GTKLIBS		+=	$(shell pkg-config --libs gtk+-3.0)
+GTKCFLAGS	+=	$(shell pkg-config --cflags gtk+-3.0)
+
+
 CFLAGS		+=	-I$(INCDIR) -I../utils/inc/
 CFLAGS		+=	-Wall -Wextra -Winit-self
 CFLAGS		+=	-Wunused-function -pipe -Winit-self
+CFLAGS		+=	$(GTKCFLAGS)
 
 LDFLAGS		+=	-L../utils/ -lutils
 LDFLAGS		+=	-Wl,-O1
+LDFLAGS		+=	$(GTKLIBS)
 
 OBJ		=	$(patsubst %${FILETYPE},${OBJDIR}%.o, $(SRC))
 
