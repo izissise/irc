@@ -5,10 +5,8 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Wed Apr 16 17:14:11 2014 
+** Last update Thu Apr 17 13:02:26 2014 
 */
-
-#include <gtk/gtk.h>
 
 #include <gtk/gtk.h>
 
@@ -69,8 +67,8 @@ GtkTreeModel	*create_completion_model()
   char		*cmd[2];
 
   i = 0;
-  cmd[0] = "/toto";
-  cmd[1] = "/tata";
+  cmd[0] = "/msg";
+  cmd[1] = "/toto";
   list = gtk_list_store_new (1, G_TYPE_STRING);
   while (i < 2)
     {
@@ -98,6 +96,10 @@ void			set_completion_mod(GtkWidget *entry)
 void		create_gui(GtkWidget *win)
 {
   GtkWidget	*grid;
+  GtkWidget	*box;
+  GtkWidget	*vbox;
+  GtkWidget	*frame;
+  GtkWidget	*text_view;
   GtkWidget	*text_bar;
   GtkWidget	*menu_vbox;
   GtkWidget	*all_widget;
@@ -105,35 +107,56 @@ void		create_gui(GtkWidget *win)
   /* Here we construct the container that is going pack the Widget */
   grid = gtk_grid_new ();
   menu_vbox = create_menubar();
+  vbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
   all_widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (win), all_widget);
-
   gtk_box_pack_start(GTK_BOX(all_widget), menu_vbox, FALSE, FALSE, 0);
-  /* gtk_grid_attach(GTK_GRID(grid), menu_vbox, 0, 0, 1, 1); */
 
-  /* Pack the container in the window */
+  /* Create the message view */
+  /* box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); */
+  /* box = gtk_alignment_new(0, 0, 1, 1); */
+  frame = gtk_frame_new(NULL);
+  text_view = gtk_text_view_new();
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
+  gtk_widget_set_hexpand(text_view, TRUE);
+  gtk_widget_set_vexpand(text_view, TRUE);
+  gtk_container_add (GTK_CONTAINER(frame), text_view);
+  /* gtk_container_set_border_width(GTK_CONTAINER(box), 5); */
+  gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_ETCHED_OUT);
+  /* gtk_container_add (GTK_CONTAINER(box), frame); */
+  /* gtk_grid_attach (GTK_GRID(grid), frame, 0, 0, 10, 10); */
+  gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+  /* gtk_grid_attach (GTK_GRID(grid), box, 0, 0, 10, 10); */
 
+  /* Create the client view */
+  box = gtk_alignment_new(0, 1, 0.5, 1);
+  frame = gtk_frame_new(NULL);
+  text_view = gtk_text_view_new();
+  gtk_text_view_set_editable(GTK_TEXT_VIEW(text_view), FALSE);
+  gtk_widget_set_hexpand(text_view, TRUE);
+  gtk_widget_set_vexpand(text_view, TRUE);
+  gtk_container_add (GTK_CONTAINER(frame), text_view);
+  gtk_container_add (GTK_CONTAINER(box), frame);
+  gtk_box_pack_start(GTK_BOX(vbox), box, TRUE, TRUE, 0);
+  /* gtk_container_set_border_width(GTK_CONTAINER(box), 5); */
+
+  gtk_box_set_spacing (GTK_BOX(vbox), 5);
+  /* gtk_grid_attach (GTK_GRID(grid), box, 11, 0, 10, 1); */
+  gtk_grid_attach (GTK_GRID(grid), vbox, 0, 0, 11, 10);
+
+  /* Create the input line */
   text_bar = gtk_entry_new();
-  gtk_grid_attach (GTK_GRID(grid), text_bar, 2, 0, 1, 2);
+  gtk_widget_set_hexpand(text_bar, TRUE);
+  /* gtk_box_pack_start(GTK_BOX(all_widget), text_bar, TRUE, FALSE, 0); */
+  gtk_grid_attach (GTK_GRID(grid), text_bar, 0, 11, 1, 10);
   set_completion_mod(text_bar);
-  /* button = gtk_button_new_with_label ("Send"); */
-  /* gtk_widget_set_hexpand(button, TRUE); */
-  /* gtk_widget_set_vexpand(button, TRUE); */
-  /* g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL); */
 
-  /* button = gtk_button_new_with_label ("Button 2"); */
-  /* gtk_widget_set_hexpand(button, TRUE); */
-  /* gtk_widget_set_vexpand(button, TRUE); */
-  /* g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL); */
-  /* gtk_grid_attach (GTK_GRID (grid), button, 2, 1, 1, 1); */
+  gtk_grid_set_row_spacing (GTK_GRID(grid), 3);
+  gtk_box_pack_start(GTK_BOX(all_widget), grid, TRUE, TRUE, 0);
 
-  /* button = gtk_button_new_with_label ("Quit"); */
-  /* gtk_widget_set_hexpand(button, TRUE); */
-  /* gtk_widget_set_vexpand(button, TRUE); */
-  /* g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL); */
+  /* gtk_grid_set_column_spacing(GTK_GRID(grid), 10); */
+  /* gtk_box_pack_start(GTK_BOX(all_widget), box, FALSE, FALSE, 0); */
 
-  /* gtk_grid_attach (GTK_GRID (grid), button, 1, 2, 2, 1); */
-  gtk_box_pack_start(GTK_BOX(all_widget), grid, FALSE, TRUE, 0);
 }
 
 int		main(int ac, char **av)
