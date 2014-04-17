@@ -17,7 +17,7 @@ FILETYPE	=	.c
 
 RM		=	rm -f
 
-NAME		=	serveur
+NAME		=	server
 
 OBJDIR		=	obj/
 SRCDIR		=	src/
