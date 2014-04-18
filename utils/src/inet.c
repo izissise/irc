@@ -41,10 +41,9 @@ int		use_ipsocket(t_net *net, struct addrinfo *tmp,
   net->socktype = tmp->ai_socktype;
   net->addrlen = tmp->ai_addrlen;
   if (f)
-    ret = f(net->socket, (struct sockaddr*)(&(net->addr)), net->addrlen);
-  if (ret == -1)
-    close(net->socket);
-  if (f && (ret != -1)
+    if ((ret = f(net->socket, (struct sockaddr*)(&(net->addr)), net->addrlen)))
+      close(net->socket);
+  if (f && (!ret)
       && (getsockname(net->socket, (struct sockaddr*)(&(net->addr)),
                       &(net->addrlen))) == -1)
     {
