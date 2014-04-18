@@ -14,7 +14,7 @@ void	handle_peer(t_peer *peer, t_selfd *fd, t_server *serv)
 {
   if (fd->etype == FDREAD)
     {
-      //stock readed into a larger buffer
+      //stock read into a larger buffer
       fd->checkwrite += 1;
     }
   else if (fd->etype == FDWRITE)
