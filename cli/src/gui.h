@@ -5,11 +5,13 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Thu Apr 17 21:58:38 2014 
+** Last update Fri Apr 18 10:35:42 2014 
 */
 
-#ifndef _GTK_H_
-#define _GTK_H_
+#ifndef _GUI_H_
+#define _GUI_H_
+
+#define UNUSED __attribute__((unused))
 
 typedef	struct	s_window
 {
@@ -20,4 +22,4 @@ typedef	struct	s_window
   int		socket_cmd;
 }		t_window;
 
-#endif /* _GTK_H_ */
+#endif /* _GUI_H_ */

@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Thu Apr 17 23:45:57 2014 
+** Last update Fri Apr 18 10:36:08 2014 
 */
 
 #include <stdlib.h>
@@ -16,7 +16,6 @@
 
 void		send_msg(t_window *client)
 {
-  GtkTextBuffer	*buf;
   GtkTextBuffer	*text_view;
   GtkTextIter	it;
   const gchar	*tmp;
@@ -26,18 +25,19 @@ void		send_msg(t_window *client)
     return ;
   text_view = gtk_text_view_get_buffer(GTK_TEXT_VIEW(client->msg));
   gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
-  gtk_text_buffer_insert(GTK_TEXT_BUFFER(text_view), &it, "Moi: ", 5);
-  gtk_text_buffer_insert(GTK_TEXT_BUFFER(text_view), &it, tmp, strlen(tmp));
-  gtk_text_buffer_insert(GTK_TEXT_BUFFER(text_view), &it, "\n", 1);
+  gtk_text_buffer_insert(text_view, &it, "Moi: ", 5);
+  gtk_text_buffer_insert(text_view, &it, tmp, strlen(tmp));
+  gtk_text_buffer_insert(text_view, &it, "\n", 1);
   gtk_entry_set_text(GTK_ENTRY(client->entry), "");
+  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW(client->msg), &it, 0.0, FALSE, 0, 0);
 }
 
-void	entry_function(GtkEntry *entry, gpointer user_data)
+void	entry_function(UNUSED GtkEntry *entry, gpointer user_data)
 {
   send_msg(user_data);
 }
 
-void	button_function(GtkButton *button, gpointer user_data)
+void	button_function(UNUSED GtkButton *button, gpointer user_data)
 {
   send_msg(user_data);
 }
@@ -55,7 +55,7 @@ GtkWidget	*create_menubar(t_window *client)
   menu_vbox = gtk_box_new(FALSE, 0);
   menu = gtk_menu_bar_new();
   submenu = gtk_menu_new();
-  tmp = gtk_menu_item_new_with_label("File");
+  tmp = gtk_menu_item_new_with_label("Connect");
   connect = gtk_menu_item_new_with_label("Connect to a server");
   join = gtk_menu_item_new_with_label("Join a Channel");
   quit = gtk_menu_item_new_with_label("Quit");
@@ -131,6 +131,7 @@ void		create_gui(GtkWidget *win, t_window *client)
   GtkWidget	*grid;
   GtkWidget	*box;
   GtkWidget	*button;
+  GtkWidget	*scroll;
   GtkWidget	*frame;
   GtkWidget	*menu_vbox;
   GtkWidget	*all_widget;
@@ -144,25 +145,31 @@ void		create_gui(GtkWidget *win, t_window *client)
 
   /* Create the message view */
   frame = gtk_frame_new(NULL);
+  scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   client->msg = gtk_text_view_new();
   gtk_text_view_set_editable(GTK_TEXT_VIEW(client->msg), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(client->msg), FALSE);
   gtk_widget_set_hexpand(client->msg, TRUE);
   gtk_widget_set_vexpand(client->msg, TRUE);
-  gtk_container_add (GTK_CONTAINER(frame), client->msg);
+  gtk_container_add (GTK_CONTAINER (scroll), client->msg);
+  gtk_container_add (GTK_CONTAINER(frame), scroll);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 2);
   gtk_frame_set_shadow_type( GTK_FRAME(frame), GTK_SHADOW_ETCHED_OUT);
   gtk_grid_attach (GTK_GRID(grid), frame, 0, 0, 10, 10);
 
   /* Create the client view */
   frame = gtk_frame_new(NULL);
+  scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   client->other_client = gtk_text_view_new();
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(client->other_client), FALSE);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(client->other_client), FALSE);
   gtk_widget_set_size_request (client->other_client, 150, -1);
   gtk_widget_set_vexpand(client->other_client, TRUE);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 2);
-  gtk_container_add (GTK_CONTAINER(frame), client->other_client);
+  gtk_container_add (GTK_CONTAINER (scroll), client->other_client);
+  gtk_container_add (GTK_CONTAINER(frame), scroll);
   gtk_grid_attach (GTK_GRID(grid), frame, 10, 0, 10, 1);
 
   /* Create the input line */
