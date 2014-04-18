@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Fri Apr 18 11:30:24 2014 
+** Last update Fri Apr 18 13:21:36 2014 
 */
 
 #include <stdlib.h>
@@ -13,12 +13,13 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include "gui.h"
-#include "client.h"
 
 void		send_msg(t_window *client)
 {
   GtkTextBuffer	*text_view;
   GtkTextIter	it;
+  int		ret;
+  gchar		buf[1024];
   const gchar	*tmp;
 
   tmp = gtk_entry_get_text(GTK_ENTRY(client->entry));
@@ -26,8 +27,10 @@ void		send_msg(t_window *client)
     return ;
   text_view = gtk_text_view_get_buffer(GTK_TEXT_VIEW(client->msg));
   gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
-  gtk_text_buffer_insert(text_view, &it, "Moi: ", 5);
-  gtk_text_buffer_insert(text_view, &it, tmp, strlen(tmp));
+  write(client->socket->socket, tmp, strlen(tmp));
+  ret = read(client->socket->socket, buf, 1024);
+  buf[ret] = 0;
+  gtk_text_buffer_insert(text_view, &it, buf, ret);
   gtk_text_buffer_insert(text_view, &it, "\n", 1);
   gtk_entry_set_text(GTK_ENTRY(client->entry), "");
   gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW(client->msg), &it, 0.0, FALSE, 0, 0);
@@ -196,9 +199,8 @@ void		create_gui(GtkWidget *win, t_window *client)
   gtk_box_pack_start(GTK_BOX(all_widget), grid, TRUE, TRUE, 0);
 }
 
-gboolean	time_handler(GtkWidget *widget)
+gboolean	time_handler(t_window *data)
 {
-  printf ("Toto\n");
   return TRUE;
 }
 
@@ -210,16 +212,16 @@ int		main(int ac, char **av)
   if (ac != 3)
     return (1);
   if (!(client.socket = create_connection(av[1], av[2],
-					       SOCK_STREAM, &connect)))
+					  SOCK_STREAM, &connect)))
     return (1);
   signal(SIGPIPE, SIG_IGN);
   gtk_init(&ac, &av);
   win = init_windows("Gtk Client", 800, 600);
   create_gui(win, &client);
-  g_timeout_add(1000, (GSourceFunc)time_handler, &client);
+  /* g_timeout_add(1000, (GSourceFunc)time_handler, &client); */
   gtk_widget_show_all(win);
   gtk_main();
-  close_connection(client);
+  close_connection(client.socket);
   return (0);
 }
 
