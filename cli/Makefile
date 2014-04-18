@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Thu Apr 17 22:16:55 2014 
+## Last update Fri Apr 18 09:51:06 2014 
 ##
 
 SRC		=	main.c
@@ -55,6 +55,7 @@ $(NAME):	$(OBJ)
 		@echo -e "Linking $@ { $(LDFLAGS) }" | sed 's/^-e //' \
 		| sed 's/[-a-zA-Z]\+/\x1B[34m&\x1B[0m/g'
 		@$(CC) -o $(NAME) $(OBJ) $(LDFLAGS)
+		@cp -f $(NAME) ../$(NAME)
 
 all:	$(NAME)
 

@@ -8,13 +8,13 @@
 ## Last update Sun Mar 30 16:01:40 2014 hugues morisset
 ##
 
-NAME	=	nibbler/libs
+NAME	=	myirc
 
 SUBDIRS	=	utils \
-			server \
+			serv \
 			cli
 
-RULES	=	serveur \
+RULES	=	server \
 			client
 
 RM	=	rm -f

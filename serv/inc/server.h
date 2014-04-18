@@ -22,11 +22,14 @@
 typedef struct	s_server
 {
   t_list		*watch;
+  t_list		**clients_begin;
 }		t_server;
 
 typedef struct	s_peer
 {
   t_net		*sock;
+  int		bufused;
+  char		buff[BUFSIZ];
 }		t_peer;
 
 void	handle_server(t_server *serv);
@@ -34,6 +37,6 @@ void	handle_newconnection(t_selfd *fd, t_server *serv);
 
 t_peer	*create_peer(t_net *sock);
 void		close_client_connection(void *d);
-void		handle_peer(t_peer *peer, t_selfd *fd, t_server *serv, char *buff);
+void		handle_peer(t_peer *peer, t_selfd *fd, t_server *serv);
 
 #endif /* !SERVER_H_INCLUDED */
