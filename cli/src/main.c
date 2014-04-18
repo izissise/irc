@@ -5,22 +5,41 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Thu Apr 17 22:35:09 2014 
+** Last update Thu Apr 17 23:45:57 2014 
 */
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <gtk/gtk.h>
 #include "gui.h"
 
+void		send_msg(t_window *client)
+{
+  GtkTextBuffer	*buf;
+  GtkTextBuffer	*text_view;
+  GtkTextIter	it;
+  const gchar	*tmp;
+
+  tmp = gtk_entry_get_text(GTK_ENTRY(client->entry));
+  if (!tmp || !*tmp)
+    return ;
+  text_view = gtk_text_view_get_buffer(GTK_TEXT_VIEW(client->msg));
+  gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
+  gtk_text_buffer_insert(GTK_TEXT_BUFFER(text_view), &it, "Moi: ", 5);
+  gtk_text_buffer_insert(GTK_TEXT_BUFFER(text_view), &it, tmp, strlen(tmp));
+  gtk_text_buffer_insert(GTK_TEXT_BUFFER(text_view), &it, "\n", 1);
+  gtk_entry_set_text(GTK_ENTRY(client->entry), "");
+}
+
 void	entry_function(GtkEntry *entry, gpointer user_data)
 {
-  printf("ENTRY = %s\n", gtk_entry_get_text (GTK_ENTRY(entry)));
-  gtk_entry_set_text(entry, "");
+  send_msg(user_data);
 }
 
 void	button_function(GtkButton *button, gpointer user_data)
 {
-  printf("BUTTON = %s\n", gtk_entry_get_text (GTK_ENTRY((((t_window *)user_data))->entry)));
-  gtk_entry_set_text((GTK_ENTRY((((t_window *)user_data))->entry)), "");
+  send_msg(user_data);
 }
 
 GtkWidget	*create_menubar(t_window *client)
@@ -127,6 +146,7 @@ void		create_gui(GtkWidget *win, t_window *client)
   frame = gtk_frame_new(NULL);
   client->msg = gtk_text_view_new();
   gtk_text_view_set_editable(GTK_TEXT_VIEW(client->msg), FALSE);
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(client->msg), FALSE);
   gtk_widget_set_hexpand(client->msg, TRUE);
   gtk_widget_set_vexpand(client->msg, TRUE);
   gtk_container_add (GTK_CONTAINER(frame), client->msg);
@@ -137,6 +157,7 @@ void		create_gui(GtkWidget *win, t_window *client)
   /* Create the client view */
   frame = gtk_frame_new(NULL);
   client->other_client = gtk_text_view_new();
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(client->other_client), FALSE);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(client->other_client), FALSE);
   gtk_widget_set_size_request (client->other_client, 150, -1);
   gtk_widget_set_vexpand(client->other_client, TRUE);
@@ -149,7 +170,6 @@ void		create_gui(GtkWidget *win, t_window *client)
   gtk_widget_set_hexpand(client->entry, TRUE);
   gtk_grid_attach (GTK_GRID(grid), client->entry, 0, 10, 1, 10);
   set_completion_mod(client->entry);
-  g_signal_connect(client->entry, "activate", G_CALLBACK (entry_function), NULL);
 
   /* Create Send Button */
 
@@ -159,6 +179,8 @@ void		create_gui(GtkWidget *win, t_window *client)
   gtk_container_set_border_width(GTK_CONTAINER(box), 2);
   gtk_container_add (GTK_CONTAINER(box), button);
   gtk_grid_attach (GTK_GRID(grid), box, 10, 10, 1, 1);
+
+  g_signal_connect(client->entry, "activate", G_CALLBACK (entry_function), client);
   g_signal_connect(button, "clicked", G_CALLBACK (button_function), client);
 
   gtk_box_pack_start(GTK_BOX(all_widget), grid, TRUE, TRUE, 0);
