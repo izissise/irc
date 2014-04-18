@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Fri Apr 18 10:36:08 2014 
+** Last update Fri Apr 18 11:30:24 2014 
 */
 
 #include <stdlib.h>
@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include "gui.h"
+#include "client.h"
 
 void		send_msg(t_window *client)
 {
@@ -146,8 +147,10 @@ void		create_gui(GtkWidget *win, t_window *client)
   /* Create the message view */
   frame = gtk_frame_new(NULL);
   scroll = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   client->msg = gtk_text_view_new();
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (client->msg), GTK_WRAP_WORD_CHAR);
   gtk_text_view_set_editable(GTK_TEXT_VIEW(client->msg), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW(client->msg), FALSE);
   gtk_widget_set_hexpand(client->msg, TRUE);
@@ -193,29 +196,35 @@ void		create_gui(GtkWidget *win, t_window *client)
   gtk_box_pack_start(GTK_BOX(all_widget), grid, TRUE, TRUE, 0);
 }
 
+gboolean	time_handler(GtkWidget *widget)
+{
+  printf ("Toto\n");
+  return TRUE;
+}
+
 int		main(int ac, char **av)
 {
   GtkWidget	*win;
   t_window	client;
 
-  /* if (ac != 3) */
-  /*   return (1); */
-  /* if (!(client.socket_data = create_connection(av[1], av[2],
-     SOCK_STREAM, &connect))) */
-  /*   return (1); */
+  if (ac != 3)
+    return (1);
+  if (!(client.socket = create_connection(av[1], av[2],
+					       SOCK_STREAM, &connect)))
+    return (1);
   signal(SIGPIPE, SIG_IGN);
   gtk_init(&ac, &av);
   win = init_windows("Gtk Client", 800, 600);
   create_gui(win, &client);
+  g_timeout_add(1000, (GSourceFunc)time_handler, &client);
   gtk_widget_show_all(win);
   gtk_main();
+  close_connection(client);
   return (0);
 }
 
-  /* t_net	*client; */
   /* char	buff[BUFSIZ]; */
   /* int	tmp; */
 
   /* while ((tmp = read(client->socket, buff, sizeof(buff))) > 0) */
-  /*   write(1, buff, tmp); */
-  /* close_connection(client); */
+   /*   write(1, buff, tmp); */

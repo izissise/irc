@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Fri Apr 18 10:35:42 2014 
+** Last update Fri Apr 18 11:19:50 2014 
 */
 
 #ifndef _GUI_H_
@@ -18,8 +18,7 @@ typedef	struct	s_window
   GtkWidget	*entry;
   GtkWidget	*msg;
   GtkWidget	*other_client;
-  int		socket_data;
-  int		socket_cmd;
+  t_net		*socket;
 }		t_window;
 
 #endif /* _GUI_H_ */
