@@ -5,15 +5,21 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Fri Apr 18 17:43:00 2014 
+** Last update Sat Apr 19 15:47:32 2014 
 */
 
 #ifndef _GUI_H_
 # define _GUI_H_
 
+# include <stdlib.h>
+# include <string.h>
+# include <stdio.h>
 # include "client.h"
 
 # define UNUSED __attribute__((unused))
+# define DEFAULT_PORT "4242"
+
+# define GET_PORT(str) ((!str || !*str) ? DEFAULT_PORT : str)
 
 typedef	struct	s_window
 {
@@ -28,6 +34,7 @@ void		entry_function(UNUSED GtkEntry *entry, gpointer user_data);
 void		button_function(UNUSED GtkButton *button, gpointer user_data);
 void		connect_function(UNUSED GtkMenuItem *item, gpointer user_data);
 void		join_function(UNUSED GtkMenuItem *item, gpointer user_data);
+void		display_dialog_error(char *err, GtkWidget *win);
 void		send_msg(t_window *client);
 GtkWidget	*create_menubar(t_window *client);
 GtkWidget	*init_windows(char *name, int size_x, int size_y);
