@@ -24,5 +24,6 @@ typedef struct	s_gnl
 }		t_gnl;
 
 int	get_next_line(const int fd, t_gnl *gnl);
+int	put_next_buff(const int fd, char **str);
 
 #endif /* !GET_NEXT_LINE_H_INCLUDED */

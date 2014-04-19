@@ -13,19 +13,28 @@
 void	client_stuff(t_selfd *fd, t_server *serv)
 {
   t_peer	*client;
+  int	tmp;
 
   client = (t_peer*)fd->data;
-  if ((fd->etype == FDREAD) && ((client->bufused = read(fd->fd, client->buff,
-                                 sizeof(client->buff))) > 0))
-    handle_peer(client, fd, serv);
-  else if (fd->etype == FDWRITE)
+  if ((fd->etype == FDREAD)
+      && ((tmp = get_next_line(client->sock->socket, &(client->gnl))) == 1))
+    handle_peer_read(client, fd, serv);
+  else if ((fd->etype == FDREAD) && (tmp == 2))
     {
-      handle_peer(client, fd, serv);
-      write_sock(client->buff, client->sock->socket, client->bufused);
+      handle_peer_read(client, fd, serv);
+      rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
+                   &close_client_connection);
     }
-  else
+  else if (tmp == -1)
     rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
                  &close_client_connection);
+  if (fd->etype == FDWRITE)
+    {
+      handle_peer_write(client, fd, serv);
+      if ((put_next_buff(client->sock->socket, &(client->towrite))) == -1)
+        rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
+                     &close_client_connection);
+    }
 }
 
 void		close_client_connection(void *d)

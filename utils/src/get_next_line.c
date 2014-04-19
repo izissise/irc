@@ -48,6 +48,8 @@ int	get_next_line(const int fd, t_gnl *gnl)
       gnl->buff[nbread] = '\0';
       gnl->tmpline = my_stradd(gnl->tmpline, gnl->buff, nbread);
     }
+  else
+    perror("gnl");
   if ((tmp = gnl->tmpline ? index(gnl->tmpline, '\n') : NULL) || nbread == 0)
     {
       if (tmp)
@@ -56,7 +58,31 @@ int	get_next_line(const int fd, t_gnl *gnl)
       tmp2 = gnl->tmpline;
       gnl->tmpline = tmp ? strdup(&(tmp[1])) : NULL;
       free(tmp2);
-      return (1);
+      return (nbread ? 1 : 2);
     }
   return (nbread == -1 ? -1 : 0);
+}
+
+int	put_next_buff(const int fd, char **str)
+{
+  int	wrote;
+  int	len;
+
+  len = 0;
+  if (str && (*str))
+    {
+      len = strlen(*str);
+      if ((wrote = write(fd, (*str), len)) != len)
+        {
+          if (wrote == -1)
+            {
+              perror("write");
+              return (-1);
+            }
+          (*str) = &((*str)[len]);
+          return (0);
+        }
+      return (1);
+    }
+  return (-1);
 }
