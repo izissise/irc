@@ -23,6 +23,7 @@ typedef struct	s_server
 {
   t_list		*watch;
   t_list		**clients_begin;
+
 }		t_server;
 
 typedef struct	s_peer

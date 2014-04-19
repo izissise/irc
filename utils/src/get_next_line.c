@@ -8,7 +8,7 @@
 ** Last update Sat May 18 22:52:41 2013 remi robert
 */
 
-#include "include.h"
+#include "get_next_line.h"
 
 char	*my_stradd(char *str, char *add, int size_add)
 {
@@ -36,76 +36,27 @@ char	*my_stradd(char *str, char *add, int size_add)
   return (res);
 }
 
-int	pos_endl(char *str, int strsize)
+int	get_next_line(const int fd, t_gnl *gnl)
 {
-  int	i;
+  int	nbread;
+  char	*tmp;
+  char	*tmp2;
 
-  i = 0;
-  while (str[i] != '\n')
+  gnl->line = NULL;
+  if ((nbread = read(fd, gnl->buff, sizeof(gnl->buff) - 1)) >= 0)
     {
-      if (i >= (strsize - 1))
-        return (-1);
-      i++;
+      gnl->buff[nbread] = '\0';
+      gnl->tmpline = my_stradd(gnl->tmpline, gnl->buff, nbread);
     }
-  return (i);
-}
-
-void	my_shiftleft_tab(char *str, int n)
-{
-  int	i;
-  int	len;
-
-  len = str ? strlen(str) : 0;
-  i = 0;
-  while (i < len)
+  if ((tmp = gnl->tmpline ? index(gnl->tmpline, '\n') : NULL) || nbread == 0)
     {
-      if ((i + n) > len)
-        str[i] = '\0';
-      else
-        str[i] = str[i + n];
-      i++;
+      if (tmp)
+        tmp[0] = '\0';
+      gnl->line = gnl->tmpline ? strdup(gnl->tmpline) : NULL;
+      tmp2 = gnl->tmpline;
+      gnl->tmpline = tmp ? strdup(&(tmp[1])) : NULL;
+      free(tmp2);
+      return (1);
     }
-}
-
-char	*remove_ms_carriage_ret(char *str)
-{
-  int	len;
-
-  if (str)
-    {
-      len = strlen(str);
-      len -= 1;
-      if (len >= 0 && (str[len] == '\r'))
-        str[len] = '\0';
-    }
-  return (str);
-}
-
-int		get_next_line(const int fd, char *buff, int index)
-{
-  char	buffer[BUFSIZ];
-  int	index = 0;
-  int		nbread;
-  char		*res;
-
-  res = NULL;
-  nbread = 1;
-  while (nbread > 0)
-    {
-      if (index != 0)
-        {
-          nbread = pos_endl(buffer, index);
-          if (nbread != -1)
-            {
-              if ((res = my_stradd(res, buffer, nbread)))
-                my_shiftleft_tab(buffer, nbread + 1);
-              index = index - nbread - 1;
-              return (remove_ms_carriage_ret(res));
-            }
-          res = my_stradd(res, buffer, index);
-        }
-      nbread = read(fd, buffer, BUFSIZ);
-      index = nbread;
-    }
-  return (remove_ms_carriage_ret(res));
+  return (nbread == -1 ? -1 : 0);
 }

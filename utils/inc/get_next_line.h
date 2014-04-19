@@ -14,10 +14,15 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include <unistd.h>
 
 typedef struct	s_gnl
 {
-
+  char		buff[BUFSIZ];
+  char		*tmpline;
+  char		*line;
 }		t_gnl;
 
-#endif // GET_NEXT_LINE_H_INCLUDED
+int	get_next_line(const int fd, t_gnl *gnl);
+
+#endif /* !GET_NEXT_LINE_H_INCLUDED */
