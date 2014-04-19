@@ -5,12 +5,9 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Fri Apr 18 17:45:22 2014 
+** Last update Sat Apr 19 19:18:22 2014 
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <gtk/gtk.h>
 #include "gui.h"
 
