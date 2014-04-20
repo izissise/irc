@@ -5,14 +5,16 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sat Apr 19 15:12:54 2014 
+## Last update Sun Apr 20 02:22:40 2014 
 ##
 
 SRC		=	main.c \
 			gui.c \
 			callback_func.c \
 			network.c \
-			dialog_box.c
+			dialog_box.c \
+			menu_bar.c \
+			ui.c
 
 CC		=	gcc
 FILETYPE	=	.c
