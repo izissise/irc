@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Sun Apr 20 02:18:42 2014
-** Last update Sun Apr 20 02:36:30 2014 
+** Last update Sun Apr 20 02:38:28 2014 
 */
 
 #include <gtk/gtk.h>
@@ -29,11 +29,12 @@ void		create_connect_menu(t_window *client, GtkWidget *menu)
   gtk_menu_shell_append(GTK_MENU_SHELL(submenu), join);
   gtk_menu_shell_append(GTK_MENU_SHELL(submenu), quit);
   gtk_menu_shell_append(GTK_MENU_SHELL(menu), tmp);
-  g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(gtk_main_quit), NULL);
-  g_signal_connect(G_OBJECT(connect), "activate", G_CALLBACK(connect_function),
-		   client);
-  g_signal_connect(G_OBJECT(join), "activate", G_CALLBACK(join_function),
-		   client);
+  g_signal_connect(G_OBJECT(quit), "activate",
+		   G_CALLBACK(gtk_main_quit), NULL);
+  g_signal_connect(G_OBJECT(connect), "activate",
+		   G_CALLBACK(connect_function), client);
+  g_signal_connect(G_OBJECT(join), "activate",
+		   G_CALLBACK(join_function), client);
 }
 
 GtkWidget	*create_menubar(t_window *client)
