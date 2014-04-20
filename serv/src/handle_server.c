@@ -25,10 +25,10 @@ void	client_stuff(t_selfd *fd, t_server *serv)
       rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
                    &close_client_connection);
     }
-  else if (tmp == -1)
+  else if ((fd->etype == FDREAD) && (tmp == -1))
     rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
                  &close_client_connection);
-  if (fd->etype == FDWRITE)
+  else if (fd->etype == FDWRITE)
     {
       handle_peer_write(client, fd, serv);
       if ((put_next_buff(client->sock->socket, &(client->towrite))) == -1)
@@ -99,4 +99,3 @@ void		handle_server(t_server *serv)
         event->callback(event, serv);
     }
 }
-

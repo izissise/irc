@@ -84,5 +84,5 @@ int	put_next_buff(const int fd, char **str)
         }
       return (1);
     }
-  return (-1);
+  return (0);
 }

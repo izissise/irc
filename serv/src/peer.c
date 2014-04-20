@@ -13,6 +13,7 @@
 void	handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv)
 {
   fd->checkwrite += 1;
+  free(peer->gnl.line);
 }
 
 void	handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv)
@@ -30,5 +31,6 @@ t_peer	*create_peer(t_net *sock)
   res->sock = sock;
   memset(&(res->gnl), 0, sizeof(t_gnl));
   res->nick = strdup("Ano");
+  res->towrite = NULL;
   return (res);
 }
