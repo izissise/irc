@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Sun Apr 20 02:32:23 2014 
+** Last update Mon Apr 21 01:48:29 2014 
 */
 
 #ifndef _GUI_H_
@@ -17,7 +17,7 @@
 # include "client.h"
 
 # define UNUSED __attribute__((unused))
-# define DEFAULT_PORT "6697"
+# define DEFAULT_PORT "6667"
 
 # define GET_PORT(str) ((!str || !*str) ? DEFAULT_PORT : str)
 
