@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:26:12 2014
-** Last update Sat Apr 19 23:52:17 2014 
+** Last update Mon Apr 21 16:23:29 2014 
 */
 
 #include <gtk/gtk.h>
@@ -48,7 +48,7 @@ void		connect_function(UNUSED GtkMenuItem *item, gpointer user_data)
   entry[0] = gtk_entry_new();
   gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), entry[0], 1, 0, 1, 1);
-  label = gtk_label_new("Server's Port (Default: 6697): ");
+  label = gtk_label_new("Server's Port (Default: " DEFAULT_PORT "): ");
   entry[1] = gtk_entry_new();
   gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), entry[1], 1, 1, 1, 1);

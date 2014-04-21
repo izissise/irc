@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Mon Apr 21 01:15:06 2014 
+** Last update Mon Apr 21 16:28:02 2014 
 */
 
 #include <sys/time.h>
@@ -21,21 +21,23 @@ gboolean		time_handler(t_window *client)
   fd_set		fdset;
   struct timeval	timeout;
 
+  if (!client->socket)
+    return (TRUE);
   timeout.tv_sec = 0;
   timeout.tv_usec = 10;
   FD_ZERO(&fdset);
-  FD_SET(0, &fdset);
+  FD_SET(client->socket->socket, &fdset);
   text_view = gtk_text_view_get_buffer(GTK_TEXT_VIEW(client->msg));
   gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
-  if (client->socket && select(1, &fdset, NULL, NULL, &timeout) != -1)
-    if (FD_ISSET(0, &fdset))
-      {
-	ret = read(client->socket->socket, buf, 1024);
-	gtk_text_buffer_insert(text_view, &it, buf, ret);
-	gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW(client->msg),
+  if (select(client->socket->socket + 1, &fdset, NULL, NULL, &timeout) != -1
+      && FD_ISSET(client->socket->socket, &fdset))
+    {
+      ret = read(client->socket->socket, buf, 1024);
+      gtk_text_buffer_insert(text_view, &it, buf, ret);
+      gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW(client->msg),
   				    &it, 0.0, FALSE, 0, 0);
-      }
-  return TRUE;
+    }
+  return (TRUE);
 }
 
 int		main(int ac, char **av)
@@ -47,7 +49,7 @@ int		main(int ac, char **av)
   gtk_init(&ac, &av);
   client.window = init_windows("Gtk Client", 800, 600);
   create_gui(client.window, &client);
-  g_timeout_add(10, (GSourceFunc)time_handler, &client);
+  g_timeout_add(1, (GSourceFunc)time_handler, &client);
   gtk_widget_show_all(client.window);
   gtk_main();
   if (client.socket)
