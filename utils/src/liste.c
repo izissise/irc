@@ -25,18 +25,19 @@ int	list_size(t_list *begin)
 
 void	rm_from_list(t_list **begin, t_list *trm, void (*f)(void*))
 {
-  if (begin != NULL && trm != NULL)
-    {
-      if ((*begin) == trm)
-        {
-          (*begin) = (*begin)->next;
-          if (f)
-            (*f)(trm->data);
-          free(trm);
-        }
-      else
-        rm_from_list(&((*begin)->next), trm, f);
-    }
+  if (begin)
+    while ((*begin))
+      {
+        if ((*begin) == trm)
+          {
+            (*begin) = (*begin)->next;
+            if (f)
+              f(trm->data);
+            free(trm);
+            return ;
+          }
+        begin = &((*begin)->next);
+      }
 }
 
 void		apply_on_list(t_list *begin,

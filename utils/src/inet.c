@@ -19,6 +19,7 @@ char			*get_ip_addr(t_net *net)
 
   if (!net)
     return (NULL);
+  res = NULL;
   sa = (struct sockaddr*)(&(net->addr));
   if (sa->sa_family == AF_INET)
     res = (&(((struct sockaddr_in*)sa)->sin_addr));

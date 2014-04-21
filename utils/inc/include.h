@@ -22,4 +22,10 @@
 
 # define PTRT_PACK 10
 
+int	ptr_tab_size(void **tab);
+void	**add_ptr_t_tab(void **tab, void *add);
+void	**concat_ptr_tab(void **tab1, void **tab2);
+void	rm_ptr_f_tab(void **tab, void *ptr);
+void	free_ptr_tab(void **tab, void (*f)(void *ptr));
+
 #endif /* !INCLUDE_H_INCLUDED */

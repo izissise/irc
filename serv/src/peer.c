@@ -10,18 +10,33 @@
 
 #include "server.h"
 
-void	handle_peer(t_peer *peer, t_selfd *fd, t_server *serv)
+void	handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv)
 {
-  if (fd->etype == FDREAD)
+  fd->checkwrite += 1;
+  printf("%s\n", peer->gnl.line);
+
+  free(peer->gnl.line);
+}
+
+void	handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv)
+{
+  fd->checkwrite -= 1;
+
+}
+
+void	destroy_peer(void *p)
+{
+  t_peer	*pe;
+
+  if ((pe = (t_peer*)p))
     {
-      //stock read into a larger buffer
-      fd->checkwrite += 1;
+      if (pe->chan)
+        {
+
+        }
+      close_connection(pe->sock);
     }
-  else if (fd->etype == FDWRITE)
-    {
-//write into buffer
-      fd->checkwrite -= 1;
-    }
+  free(pe);
 }
 
 t_peer	*create_peer(t_net *sock)
@@ -31,5 +46,9 @@ t_peer	*create_peer(t_net *sock)
   if ((res = malloc(1 * sizeof(t_peer))) == NULL)
     return (NULL);
   res->sock = sock;
+  memset(&(res->gnl), 0, sizeof(t_gnl));
+  res->nick = strdup("Ano");
+  res->towrite = NULL;
+  res->chan = NULL;
   return (res);
 }
