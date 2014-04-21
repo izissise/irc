@@ -79,7 +79,7 @@ int	put_next_buff(const int fd, char **str)
               perror("write");
               return (-1);
             }
-          (*str) = &((*str)[len]);
+          (*str) = &((*str)[wrote]);
           return (0);
         }
       return (1);
