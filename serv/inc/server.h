@@ -48,8 +48,8 @@ void	handle_newconnection(t_selfd *fd, t_server *serv);
 t_peer	*create_peer(t_net *sock);
 void	destroy_peer(void *p);
 void		close_client_connection(void *d);
-void		handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv);
-void		handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv);
+void		handle_peer_read(t_peer *peer, t_server *serv);
+void		handle_peer_write(t_peer *peer, t_server *serv);
 
 t_channel	*create_chan(const char *name, t_server *serv);
 void		destroy_chan(void *c);
