@@ -20,16 +20,23 @@
 # include "liste.h"
 # include "get_next_line.h"
 
+typedef struct	s_channel
+{
+  char		*name;
+  t_list		**ppl;
+  //buffer
+}		t_channel;
+
 typedef struct	s_server
 {
   t_list		*watch;
-  t_list		**clients_begin;
-
+  t_channel	**channels;
 }		t_server;
 
 typedef struct	s_peer
 {
   char		*nick;
+  t_channel	*chan;
   t_net		*sock;
   t_gnl		gnl;
   char		*towrite;
@@ -39,8 +46,13 @@ void	handle_server(t_server *serv);
 void	handle_newconnection(t_selfd *fd, t_server *serv);
 
 t_peer	*create_peer(t_net *sock);
+void	destroy_peer(void *p);
 void		close_client_connection(void *d);
 void		handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv);
 void		handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv);
+
+t_channel	*create_chan(char *name, t_server *serv);
+void		destroy_chan(void *c);
+
 
 #endif /* !SERVER_H_INCLUDED */

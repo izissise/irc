@@ -13,6 +13,8 @@
 void	handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv)
 {
   fd->checkwrite += 1;
+  printf("%s\n", peer->gnl.line);
+
   free(peer->gnl.line);
 }
 
@@ -20,6 +22,21 @@ void	handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv)
 {
   fd->checkwrite -= 1;
 
+}
+
+void	destroy_peer(void *p)
+{
+  t_peer	*pe;
+
+  if ((pe = (t_peer*)p))
+    {
+      if (pe->chan)
+        {
+
+        }
+      close_connection(pe->sock);
+    }
+  free(pe);
 }
 
 t_peer	*create_peer(t_net *sock)
@@ -32,5 +49,6 @@ t_peer	*create_peer(t_net *sock)
   memset(&(res->gnl), 0, sizeof(t_gnl));
   res->nick = strdup("Ano");
   res->towrite = NULL;
+  res->chan = NULL;
   return (res);
 }

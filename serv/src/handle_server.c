@@ -54,9 +54,8 @@ void		close_client_connection(void *d)
           free(ip);
           close_connection(tmp);
         }
-      close_connection(client->sock);
+      destroy_peer(client);
     }
-  free(client);
   free(fd);
 }
 
@@ -99,3 +98,4 @@ void		handle_server(t_server *serv)
         event->callback(event, serv);
     }
 }
+

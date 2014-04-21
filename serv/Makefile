@@ -10,7 +10,8 @@
 
 SRC		=	handle_server.c \
 			main.c \
-			peer.c
+			peer.c \
+			chan.c
 
 CC		=	gcc
 FILETYPE	=	.c
