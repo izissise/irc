@@ -13,6 +13,9 @@
 void	handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv)
 {
   fd->checkwrite += 1;
+  if (peer->chan == NULL || peer->nick == NULL)
+  peer->towrite = "Chose a nick and a channel first.\n";
+
   printf("%s\n", peer->gnl.line);
 
   free(peer->gnl.line);
