@@ -62,12 +62,13 @@ void		do_server()
   if ((tmp = serv.watch))
     while (tmp->next)
       tmp = tmp->next;
-  serv.clients_begin = &(tmp->next);
+  serv.channels = NULL;
   while (!quit)
     handle_server(&serv);
   rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[0]), &free);
   rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[1]), &free);
   rm_list(serv.watch, &close_client_connection);
+  free_ptr_tab((void**)(serv.channels), &destroy_chan);
 }
 
 int	quit_server_err(int ret)
