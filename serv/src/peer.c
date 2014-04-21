@@ -12,17 +12,14 @@
 
 void	handle_peer_read(t_peer *peer, t_server *serv)
 {
-  if (peer->chan == NULL || peer->nick == NULL)
-  peer->towrite = "Chose a nick and a channel first.\n";
-
-  printf("%s\n", peer->gnl.line);
-
-  free(peer->gnl.line);
+  (void)serv;
+  peer->towrite = peer->gnl.line;
 }
 
 void	handle_peer_write(t_peer *peer, t_server *serv)
 {
-
+  (void)peer;
+  (void)serv;
 }
 
 void	destroy_peer(void *p)

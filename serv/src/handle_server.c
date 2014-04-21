@@ -29,7 +29,7 @@ void	client_stuff(t_selfd *fd, t_server *serv)
       client->towrite = NULL;
     }
   fd->checkwrite = client->towrite ? 1 : 0;
-  if ((tmp == 2) && (tmp == -1))
+  if ((tmp == 2) || (tmp == -1))
     rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
                  &close_client_connection);
 }

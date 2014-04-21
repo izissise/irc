@@ -15,7 +15,8 @@ SRC		=	clean_tab.c \
 			liste_find.c \
 			ptr_tab.c \
 			select.c \
-			get_next_line.c
+			get_next_line.c \
+			circle_buf.c
 
 CC		=	gcc
 FILETYPE	=	.c
