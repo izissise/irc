@@ -23,7 +23,7 @@
 typedef struct	s_channel
 {
   char		*name;
-  t_list		**ppl;
+  t_list		*ppl;
   //buffer
 }		t_channel;
 
@@ -51,8 +51,10 @@ void		close_client_connection(void *d);
 void		handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv);
 void		handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv);
 
-t_channel	*create_chan(char *name, t_server *serv);
+t_channel	*create_chan(const char *name, t_server *serv);
 void		destroy_chan(void *c);
-
+void		add_ppl_chan(const char *channame, t_peer *cli, t_server *serv);
+void		rm_ppl_chan(t_peer *cli, t_server *serv);
+t_channel	*find_chan(const char *name, t_server *serv);
 
 #endif /* !SERVER_H_INCLUDED */
