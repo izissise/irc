@@ -16,25 +16,22 @@ void	client_stuff(t_selfd *fd, t_server *serv)
   int	tmp;
 
   client = (t_peer*)fd->data;
-  if ((fd->etype == FDREAD)
-      && ((tmp = get_next_line(client->sock->socket, &(client->gnl))) == 1))
-    handle_peer_read(client, fd, serv);
-  else if ((fd->etype == FDREAD) && (tmp == 2))
+  if ((fd->etype == FDWRITE) && (client->towrite == NULL))
+    handle_peer_write(client, serv);
+  tmp = (fd->etype == FDREAD) ?
+        get_next_line(client->sock->socket, &(client->gnl))
+        : put_next_buff(client->sock->socket, &(client->towrite));
+  if ((fd->etype == FDREAD) && ((tmp == 1) || (tmp == 2)))
+    handle_peer_read(client, serv);
+  else if ((fd->etype == FDWRITE) && (tmp == 1))
     {
-      handle_peer_read(client, fd, serv);
-      rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
-                   &close_client_connection);
+      free(client->towrite);
+      client->towrite = NULL;
     }
-  else if ((fd->etype == FDREAD) && (tmp == -1))
+  fd->checkwrite = client->towrite ? 1 : 0;
+  if ((tmp == 2) && (tmp == -1))
     rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
                  &close_client_connection);
-  else if (fd->etype == FDWRITE)
-    {
-      handle_peer_write(client, fd, serv);
-      if ((put_next_buff(client->sock->socket, &(client->towrite))) == -1)
-        rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
-                     &close_client_connection);
-    }
 }
 
 void		close_client_connection(void *d)

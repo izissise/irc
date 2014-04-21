@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Apr 21 23:30:28 2014 
+** Last update Mon Apr 21 23:33:52 2014 
 */
 
 #include "server.h"
@@ -21,11 +21,13 @@ static t_strfunc cmds[] = {
   {"/accept_file ", accept_file_cmd}
 };
 
-void	handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv)
+void	handle_peer_read(t_peer *peer, t_server *serv)
 {
   void	(*f)();
 
-  fd->checkwrite += 1;
+  if (peer->chan == NULL || peer->nick == NULL)
+  peer->towrite = "Chose a nick and a channel first.\n";
+
   printf("%s\n", peer->gnl.line);
   if ((f = commands(peer->gnl.line, cmds, sizeof(cmds) / sizeof(t_strfunc))) != NULL)
     f(peer->gnl.line, peer);
@@ -34,9 +36,8 @@ void	handle_peer_read(t_peer *peer, t_selfd *fd, t_server *serv)
   free(peer->gnl.line);
 }
 
-void	handle_peer_write(t_peer *peer, t_selfd *fd, t_server *serv)
+void	handle_peer_write(t_peer *peer, t_server *serv)
 {
-  fd->checkwrite -= 1;
 
 }
 

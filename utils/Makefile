@@ -35,6 +35,8 @@ CFLAGS		+=	-static -g
 
 OBJ		=	$(patsubst %${FILETYPE},${OBJDIR}%.o, $(SRC))
 
+PRINTFLAGS	=	0
+
 dummy		:=	$(shell test -d $(OBJDIR) || mkdir -p $(OBJDIR))
 dummy		:=	$(shell test -d $(SRCDIR) || mkdir -p $(SRCDIR))
 dummy		:=	$(shell test -d $(INCDIR) || mkdir -p $(INCDIR))
@@ -42,11 +44,15 @@ dummy		:=	$(shell test -d $(INCDIR) || mkdir -p $(INCDIR))
 $(OBJDIR)%.o:		$(patsubst %${FILETYPE},${SRCDIR}%${FILETYPE}, %${FILETYPE})
 			@if [ ! -d $(dir $@) ]; then mkdir -p $(dir $@); fi
 ifneq ("$(shell tty)", "not a tty")
-			@echo -e "Compiling $< { $(CFLAGS) }" | sed 's/^-e //' \
+			@if [ $(PRINTFLAGS) = "0" ]; then \
+			echo -e "Compile flags { $(CFLAGS) }" | sed 's/^-e //' \
 			| sed 's/[-a-zA-Z]\+/\x1B[31m&\x1B[0m/g' \
 			| sed 's/[A-Z]\+/\x1B[32m&\x1B[0m/g' \
-			| sed 's/[{}]/\x1B[34m&\x1B[0m/g' \
-			| sed 's/[─┬─├─└│]/\x1B[35m&\x1B[0m/g'
+			| sed 's/[{}]/\x1B[34m&\x1B[0m/g'; fi
+			$(eval PRINTFLAGS = 1)
+			@echo -e "Compiling $<" | sed 's/^-e //' \
+			| sed 's/[-a-zA-Z]\+/\x1B[31m&\x1B[0m/g' \
+			| sed 's/[A-Z]\+/\x1B[32m&\x1B[0m/g'
 			@$(CC) $(CFLAGS) -c $< -o $@
 else
 			$(CC) $(CFLAGS) -c $< -o $@

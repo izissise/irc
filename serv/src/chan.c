@@ -85,5 +85,3 @@ void		destroy_chan(void *c)
       free(chan);
     }
 }
-
-
