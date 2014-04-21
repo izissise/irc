@@ -5,13 +5,16 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sun Apr 20 15:23:13 2014 Hugues
+## Last update Mon Apr 21 23:21:34 2014 
 ##
 
 SRC		=	handle_server.c \
 			main.c \
 			peer.c \
-			chan.c
+			chan.c \
+			connect_cmd.c \
+			msg_cmd.c \
+			parse_cmd.c
 
 CC		=	gcc
 FILETYPE	=	.c

@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Oct  8 16:20:21 2012 hugues morisset
+** Last update Mon Apr 21 23:22:22 2014 
 */
 
 #ifndef SERVER_H_INCLUDED
@@ -42,6 +42,12 @@ typedef struct	s_peer
   char		*towrite;
 }		t_peer;
 
+typedef struct	s_strfunc
+{
+  const char *str;
+  void (*func)();
+}		t_strfunc;
+
 void	handle_server(t_server *serv);
 void	handle_newconnection(t_selfd *fd, t_server *serv);
 
@@ -56,5 +62,16 @@ void		destroy_chan(void *c);
 void		add_ppl_chan(const char *channame, t_peer *cli, t_server *serv);
 void		rm_ppl_chan(t_peer *cli, t_server *serv);
 t_channel	*find_chan(const char *name, t_server *serv);
+
+void	(*commands(char *cmd, t_strfunc *cmds, int size))();
+void	nickname_cmd(char *cmd, t_peer *peer);
+void	list_cmd(char *cmd, t_peer *peer);
+void	join_cmd(char *cmd, t_peer *peer);
+void	part_cmd(char *cmd, t_peer *peer);
+void	users_cmd(char *cmd, t_peer *peer);
+void	msg_cmd(char *cmd, t_peer *peer);
+void	send_file_cmd(char *cmd, t_peer *peer);
+void	accept_file_cmd(char *cmd, t_peer *peer);
+
 
 #endif /* !SERVER_H_INCLUDED */
