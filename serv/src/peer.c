@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Tue Apr 22 17:20:50 2014 
+** Last update Tue Apr 22 17:20:50 2014
 */
 
 #include "server.h"
@@ -65,9 +65,8 @@ void	destroy_peer(void *p)
   if ((pe = (t_peer*)p))
     {
       if (pe->chan)
-        {
-
-        }
+        rm_from_list(&(pe->chan->ppl), find_in_list(pe->chan->ppl, pe),
+                     NULL);
       close_connection(pe->sock);
     }
   free(pe);
