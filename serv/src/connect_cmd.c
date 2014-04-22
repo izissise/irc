@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:07:56 2014
-** Last update Tue Apr 22 17:36:24 2014 
+** Last update Tue Apr 22 22:39:04 2014 
 */
 
 #include "server.h"
@@ -13,6 +13,7 @@
 void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
   char		*nick;
+  int		size;
   t_list	*tmp;
 
   if ((nick = find_first_arg(cmd)) == NULL)
@@ -27,9 +28,11 @@ void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
 	}
       tmp = tmp->next;
     }
-  if ((peer->towrite = malloc(43 + strlen(nick) + strlen(peer->nick))) == NULL)
+  size = 44 + strlen(nick) + strlen(peer->nick);
+  if ((peer->towrite = malloc(size)) == NULL)
     return ;
-  sprintf(peer->towrite, "Your nickname was succefully change (%s -> %s)\n",
+  snprintf(peer->towrite, size,
+	   "Your nickname was succefully change (%s -> %s)\n",
 	   ((peer->nick) ? peer->nick : "nothing"), nick);
   free(peer->nick);
   if ((peer->nick = strdup(nick)) == NULL)
@@ -45,15 +48,17 @@ void		join_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
   char		*chan;
   t_channel	*channel;
+  int		size;
 
   if ((chan = find_first_arg(cmd)) == NULL)
     return ;
   if ((channel = find_chan(chan, serv)) == NULL)
     channel = create_chan(chan, serv);
   peer->chan = channel;
-  if ((peer->towrite = malloc(23 + strlen(chan))) == NULL)
+  size = 24 + strlen(chan);
+  if ((peer->towrite = malloc(size)) == NULL)
     return ;
-  sprintf(peer->towrite, "Your join the channel %s\n", chan);
+  snprintf(peer->towrite, size, "Your join the channel %s\n", chan);
 }
 
 void	part_cmd(char *cmd, t_peer *peer, t_server *serv)
