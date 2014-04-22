@@ -19,15 +19,16 @@
 # include "select.h"
 # include "liste.h"
 # include "get_next_line.h"
+# include "circle_buf.h"
 
 typedef struct	s_channel
 {
   char		*name;
-  t_list		*ppl;
-  //buffer
+  t_list	*ppl;
+  t_circle_buf	*buff;
 }		t_channel;
 
-typedef struct	s_server
+typedef struct		s_server
 {
   t_list		*watch;
   t_channel	**channels;
@@ -39,6 +40,7 @@ typedef struct	s_peer
   t_channel	*chan;
   t_net		*sock;
   t_gnl		gnl;
+  int		cir_pos;
   char		*towrite;
 }		t_peer;
 

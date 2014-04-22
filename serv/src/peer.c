@@ -48,5 +48,6 @@ t_peer	*create_peer(t_net *sock)
   res->nick = strdup("Ano");
   res->towrite = NULL;
   res->chan = NULL;
+  res->cir_pos = 0;
   return (res);
 }
