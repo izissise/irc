@@ -27,12 +27,14 @@ t_circle_buf	*create_cir_buf(int size)
   return (res);
 }
 
-char	*strndup_cir_buf(t_circle_buf *b, int n, int pos)
+char		*strndup_cir_buf(t_circle_buf *b, unsigned int n, unsigned int pos)
 {
-  int	i;
-  char	*res;
+  unsigned int	i;
+  char		*res;
 
   i = 0;
+  pos = (unsigned int)pos;
+  n = (unsigned int)n;
   if ((res = malloc((n + 1) * sizeof(char))) == NULL)
     return (NULL);
   while (i < n && (b->basptr[(i + pos) % b->size]))

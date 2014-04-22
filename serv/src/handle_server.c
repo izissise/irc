@@ -22,13 +22,16 @@ void	client_stuff(t_selfd *fd, t_server *serv)
         get_next_line(client->sock->socket, &(client->gnl))
         : put_next_buff(client->sock->socket, &(client->towrite));
   if ((fd->etype == FDREAD) && ((tmp == 1) || (tmp == 2)))
-    handle_peer_read(client, serv);
+    {
+      handle_peer_read(client, serv);
+      fd->checkwrite = client->towrite ? fd->checkwrite : fd->checkwrite - 1;
+    }
   else if ((fd->etype == FDWRITE) && (tmp == 1))
     {
       //free(client->towrite);
       client->towrite = NULL;
+      fd->checkwrite = client->towrite ? fd->checkwrite : fd->checkwrite - 1;
     }
-  fd->checkwrite = client->towrite ? 1 : 0;
   if ((tmp == 2) || (tmp == -1))
     {
       rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),

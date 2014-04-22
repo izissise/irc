@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Tue Apr 22 17:37:59 2014 
+** Last update Tue Apr 22 17:37:59 2014
 */
 
 #ifndef SERVER_H_INCLUDED
