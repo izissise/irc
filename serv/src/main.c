@@ -55,6 +55,8 @@ void		do_server()
 
   serv_verbose();
   serv.watch  = NULL;
+  serv.clients  = NULL;
+  serv.channels = NULL;
   fd[0] = create_fd(g_server4->socket, g_server4, &handle_newconnection);
   fd[1] = create_fd(g_server6->socket, g_server6, &handle_newconnection);
   add_to_list(&(serv.watch), fd[0]);
@@ -62,7 +64,6 @@ void		do_server()
   if ((tmp = serv.watch))
     while (tmp->next)
       tmp = tmp->next;
-  serv.channels = NULL;
   while (!quit)
     handle_server(&serv);
   rm_from_list(&(serv.watch), find_in_list(serv.watch, fd[0]), &free);
