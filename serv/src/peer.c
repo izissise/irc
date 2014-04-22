@@ -10,16 +10,35 @@
 
 #include "server.h"
 
+int		set_client_writecheck(void *c, UNSEDP void *arg)
+{
+  t_peer	*client;
+
+  if ((client = (t_peer*)c))
+    {
+      *(client->checkwrite) = 1;
+    }
+  return (0);
+}
+
 void	handle_peer_read(t_peer *peer, t_server *serv)
 {
-  (void)serv;
-  peer->towrite = peer->gnl.line;
+  if (peer->chan)
+    {
+      add_buff(peer->chan->buff, peer->gnl.line);
+      apply_on_list(serv->clients, &set_client_writecheck, NULL);
+    }
 }
 
 void	handle_peer_write(t_peer *peer, t_server *serv)
 {
-  (void)peer;
   (void)serv;
+  if (peer->chan)
+    {
+      if ((peer->towrite = strndup_cir_buf(peer->chan->buff,
+                                           BUFSIZ, peer->cir_pos)))
+        peer->cir_pos += BUFSIZ;
+    }
 }
 
 void	destroy_peer(void *p)
@@ -51,3 +70,4 @@ t_peer	*create_peer(t_net *sock)
   res->cir_pos = 0;
   return (res);
 }
+

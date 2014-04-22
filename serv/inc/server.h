@@ -31,6 +31,7 @@ typedef struct	s_channel
 typedef struct		s_server
 {
   t_list		*watch;
+  t_list		*clients;
   t_channel	**channels;
 }		t_server;
 
@@ -41,6 +42,7 @@ typedef struct	s_peer
   t_net		*sock;
   t_gnl		gnl;
   int		cir_pos;
+  int		*checkwrite;
   char		*towrite;
 }		t_peer;
 
