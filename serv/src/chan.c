@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Oct  8 16:20:21 2012 hugues morisset
+** Last update Tue Apr 22 23:44:13 2014 
 */
 
 #include "server.h"
@@ -49,15 +49,16 @@ t_channel	*find_chan(const char *name, t_server *serv)
   return (NULL);
 }
 
-void		add_ppl_chan(const char *channame, t_peer *cli, t_server *serv)
+int		add_ppl_chan(const char *channame, t_peer *cli, t_server *serv)
 {
   t_channel	*chan;
 
   if (!(chan = find_chan(channame, serv)))
     if (!(chan = create_chan(channame, serv)))
-      return ;
+      return (-1);
   add_to_list(&(chan->ppl), cli);
   cli->chan = chan;
+  return (0);
 }
 
 void		rm_ppl_chan(t_peer *cli, t_server *serv)

@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Tue Apr 22 17:20:50 2014
+** Last update Wed Apr 23 00:53:48 2014 
 */
 
 #include "server.h"
@@ -37,7 +37,8 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
   void	(*f)();
   char	*tmp;
 
-  if ((f = commands(peer->gnl.line, cmds, sizeof(cmds) / sizeof(t_strfunc))) != NULL)
+  if ((f = commands(peer->gnl.line, cmds,
+		    sizeof(cmds) / sizeof(t_strfunc))) != NULL)
     f(peer->gnl.line, peer, serv);
   else if (peer->chan && peer->nick)
     {

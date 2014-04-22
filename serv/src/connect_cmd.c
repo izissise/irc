@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:07:56 2014
-** Last update Tue Apr 22 22:39:04 2014 
+** Last update Wed Apr 23 01:22:15 2014 
 */
 
 #include "server.h"
@@ -13,10 +13,9 @@
 void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
   char		*nick;
-  int		size;
   t_list	*tmp;
 
-  if ((nick = find_first_arg(cmd)) == NULL)
+  if ((nick = get_first_arg(cmd)) == NULL)
     return ;
   tmp = serv->clients;
   while (tmp)
@@ -24,44 +23,67 @@ void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
       if (!strcmp(((t_peer *)tmp->data)->nick, nick))
 	{
 	  peer->towrite = strdup("This nickname is already taking\n");
+	  free(nick);
 	  return ;
 	}
       tmp = tmp->next;
     }
-  size = 44 + strlen(nick) + strlen(peer->nick);
-  if ((peer->towrite = malloc(size)) == NULL)
+  if ((peer->towrite = malloc(44 + strlen(nick) + strlen(peer->nick))) == NULL)
     return ;
-  snprintf(peer->towrite, size,
+  snprintf(peer->towrite, 44 + strlen(nick) + strlen(peer->nick),
 	   "Your nickname was succefully change (%s -> %s)\n",
 	   ((peer->nick) ? peer->nick : "nothing"), nick);
   free(peer->nick);
   if ((peer->nick = strdup(nick)) == NULL)
     return ;
+  free(nick);
 }
 
 void	list_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
-  peer->towrite = strdup("list\n");
+  char		*arg1;
+  t_channel	**tmp;
+  int		i;
+
+  if ((arg1 = get_first_arg(cmd)) == NULL || !peer->chan)
+    return ;
+  tmp = serv->channels;
+  i = 0;
+  while (tmp && tmp[i])
+    {
+      if (!*arg1 || strstr(arg1, tmp[i]->name) != NULL)
+	printf("CHAN = %s\n", tmp[i]->name);
+      ++i;
+    }
+  free(arg1);
 }
 
 void		join_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
   char		*chan;
-  t_channel	*channel;
   int		size;
 
-  if ((chan = find_first_arg(cmd)) == NULL)
+  chan = get_first_arg(cmd);
+  if (peer->chan)
+    rm_ppl_chan(peer, serv);
+  if (add_ppl_chan(chan, peer, serv) == -1)
     return ;
-  if ((channel = find_chan(chan, serv)) == NULL)
-    channel = create_chan(chan, serv);
-  peer->chan = channel;
   size = 24 + strlen(chan);
   if ((peer->towrite = malloc(size)) == NULL)
     return ;
   snprintf(peer->towrite, size, "Your join the channel %s\n", chan);
+  free(chan);
 }
 
 void	part_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
-  peer->towrite = strdup("part\n");
+  char	*arg1;
+
+  if (!peer->chan || (arg1 = get_first_arg(cmd)) == NULL)
+    return ;
+  if ((peer->towrite = malloc(24 + strlen(peer->chan->name))) == NULL)
+    return ;
+  snprintf(peer->towrite, 23 + strlen(peer->chan->name),
+	   "You left the channel %s\n", peer->chan->name);
+  rm_ppl_chan(peer, serv);
 }

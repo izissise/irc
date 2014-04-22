@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:30:53 2014
-** Last update Mon Apr 21 16:35:52 2014 
+** Last update Wed Apr 23 00:21:09 2014 
 */
 
 #include <gtk/gtk.h>
@@ -23,12 +23,11 @@ char		*parse_cmd(const gchar *cmd, const gchar **port)
   ip_tmp = &cmd[i];
   while (cmd[i] && cmd[i] != ':')
     ++i;
+  if ((ip = malloc(&cmd[i] - ip_tmp)) == NULL)
+    return (NULL);
+  ip = strndup(ip_tmp, &cmd[i] - ip_tmp);
   i = (cmd[i]) ? i + 1 : i;
   *port = &cmd[i];
-  if ((ip = malloc(*port - ip_tmp)) == NULL)
-    return (NULL);
-  memcpy(ip, ip_tmp, *port - ip_tmp);
-  ip[*port - ip_tmp] = 0;
   return (ip);
 }
 

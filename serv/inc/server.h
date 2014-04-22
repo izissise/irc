@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Tue Apr 22 17:37:59 2014 
+** Last update Tue Apr 22 23:46:14 2014 
 */
 
 #ifndef SERVER_H_INCLUDED
@@ -63,7 +63,7 @@ void		handle_peer_write(t_peer *peer, t_server *serv);
 
 t_channel	*create_chan(const char *name, t_server *serv);
 void		destroy_chan(void *c);
-void		add_ppl_chan(const char *channame, t_peer *cli, t_server *serv);
+int		add_ppl_chan(const char *channame, t_peer *cli, t_server *serv);
 void		rm_ppl_chan(t_peer *cli, t_server *serv);
 t_channel	*find_chan(const char *name, t_server *serv);
 
@@ -77,6 +77,8 @@ void	msg_cmd(char *cmd, t_peer *peer, t_server *serv);
 void	send_file_cmd(char *cmd, t_peer *peer, t_server *serv);
 void	accept_file_cmd(char *cmd, t_peer *peer, t_server *serv);
 char	*find_first_arg(char *cmd);
+char	*get_second_arg(char *cmd);
+char	*get_first_arg(char *cmd);
 
 char	*format_client_message(char *line, t_peer *client);
 
