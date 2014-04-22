@@ -14,7 +14,8 @@ SRC		=	handle_server.c \
 			chan.c \
 			connect_cmd.c \
 			msg_cmd.c \
-			parse_cmd.c
+			parse_cmd.c \
+			msg.c
 
 CC		=	gcc
 FILETYPE	=	.c

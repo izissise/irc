@@ -35,12 +35,15 @@ int		set_client_writecheck(void *c, UNSEDP void *arg)
 void	handle_peer_read(t_peer *peer, t_server *serv)
 {
   void	(*f)();
+  char	*tmp;
 
   if ((f = commands(peer->gnl.line, cmds, sizeof(cmds) / sizeof(t_strfunc))) != NULL)
     f(peer->gnl.line, peer, serv);
   else if (peer->chan && peer->nick)
     {
-      add_buff(peer->chan->buff, peer->gnl.line);
+      if ((tmp = format_client_message(peer->gnl.line, peer)))
+        add_buff(peer->chan->buff, tmp);
+      free(peer->gnl.line);
       apply_on_list(serv->clients, &set_client_writecheck, NULL);
     }
   else

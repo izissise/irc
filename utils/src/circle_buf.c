@@ -21,6 +21,7 @@ t_circle_buf	*create_cir_buf(int size)
       free(res);
       return (NULL);
     }
+  memset(res->basptr, size, 0);
   res->size = size;
   res->mpos = 0;
   return (res);

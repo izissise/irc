@@ -78,4 +78,6 @@ void	send_file_cmd(char *cmd, t_peer *peer, t_server *serv);
 void	accept_file_cmd(char *cmd, t_peer *peer, t_server *serv);
 char	*find_first_arg(char *cmd);
 
+char	*format_client_message(char *line, t_peer *client);
+
 #endif /* !SERVER_H_INCLUDED */

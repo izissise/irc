@@ -12,6 +12,7 @@
 # define CIRCLE_BUF_H_INCLUDED
 
 # include <stdlib.h>
+# include <string.h>
 
 # define CIRSIZE 10 * BUFSIZ
 
