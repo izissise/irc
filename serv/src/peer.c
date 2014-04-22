@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Apr 21 23:33:52 2014 
+** Last update Tue Apr 22 00:15:34 2014 
 */
 
 #include "server.h"
@@ -25,15 +25,15 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
 {
   void	(*f)();
 
-  if (peer->chan == NULL || peer->nick == NULL)
-  peer->towrite = "Chose a nick and a channel first.\n";
-
-  printf("%s\n", peer->gnl.line);
   if ((f = commands(peer->gnl.line, cmds, sizeof(cmds) / sizeof(t_strfunc))) != NULL)
     f(peer->gnl.line, peer);
   else
-    printf("%s\n", peer->gnl.line);
-  free(peer->gnl.line);
+    peer->towrite = strdup(cmd);
+  /* if (peer->chan == NULL || peer->nick == NULL) */
+  /*   { */
+  /*     peer->towrite = strdup("Chose a nick and a channel first.\n"); */
+  /*     return ; */
+  /*   } */
 }
 
 void	handle_peer_write(t_peer *peer, t_server *serv)
