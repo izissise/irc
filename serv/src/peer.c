@@ -27,7 +27,7 @@ int		set_client_writecheck(void *c, UNSEDP void *arg)
 
   if ((client = (t_peer*)c))
     {
-      *(client->checkwrite) = 1;
+      *(client->checkwrite) = 2;
     }
   return (0);
 }

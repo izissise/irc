@@ -19,7 +19,7 @@
 typedef struct	s_circle_buf
 {
   char		*basptr;
-  int		mpos;
+  unsigned int	mpos;
   int		size;
 }		t_circle_buf;
 
@@ -27,6 +27,6 @@ t_circle_buf	*create_cir_buf(int size);
 void			destroy_cir_buf(void *c);
 
 void	add_buff(t_circle_buf *b, char *buff);
-char	*strndup_cir_buf(t_circle_buf *b, int n, int pos);
+char	*strndup_cir_buf(t_circle_buf *b, unsigned int n, unsigned int pos);
 
 #endif /* !CIRCLE_BUF_H_INCLUDED */
