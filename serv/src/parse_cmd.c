@@ -5,10 +5,22 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 22:52:06 2014
-** Last update Mon Apr 21 23:25:38 2014 
+** Last update Tue Apr 22 17:06:37 2014 
 */
 
 #include "server.h"
+
+char	*find_first_arg(char *cmd)
+{
+  int	i;
+
+  i = 0;
+  while (cmd && cmd[i] && cmd[i] != ' ')
+    ++i;
+  while (cmd && cmd[i] && cmd[i] == ' ')
+    ++i;
+  return ((cmd) ? &cmd[i] : NULL);
+}
 
 void	(*commands(char *cmd, t_strfunc *cmds, int size))()
 {
