@@ -25,13 +25,17 @@ void	client_stuff(t_selfd *fd, t_server *serv)
     handle_peer_read(client, serv);
   else if ((fd->etype == FDWRITE) && (tmp == 1))
     {
-      free(client->towrite);
+      //free(client->towrite);
       client->towrite = NULL;
     }
   fd->checkwrite = client->towrite ? 1 : 0;
-  if ((tmp == 2) && (tmp == -1))
-    rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
-                 &close_client_connection);
+  if ((tmp == 2) || (tmp == -1))
+    {
+      rm_from_list(&(serv->watch), find_in_list(serv->watch, fd),
+                   &close_client_connection);
+      rm_from_list(&(serv->clients), find_in_list(serv->clients, client),
+                   NULL);
+    }
 }
 
 void		close_client_connection(void *d)
@@ -82,7 +86,9 @@ void		handle_newconnection(t_selfd *fd, t_server *serv)
       free(ip);
       close_connection(tmp);
     }
+  client->checkwrite = &(tmpfd->checkwrite);
   add_to_list(&(serv->watch), tmpfd);
+  add_to_list(&(serv->clients), client);
 }
 
 void		handle_server(t_server *serv)

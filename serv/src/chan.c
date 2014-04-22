@@ -18,7 +18,16 @@ t_channel	*create_chan(const char *name, t_server *serv)
     return (NULL);
   res->name = strdup(name);
   if (!(res->name))
-    return (NULL);
+    {
+      free(res);
+      return (NULL);
+    }
+  if ((res->buff = create_cir_buf(CIRSIZE)) == NULL)
+    {
+      free(res->name);
+      free(res);
+      return (NULL);
+    }
   res->ppl = NULL;
   serv->channels = (t_channel**)add_ptr_t_tab((void**)(serv->channels),
                    (void*)res);
@@ -82,6 +91,7 @@ void		destroy_chan(void *c)
           tmp = tmp->next;
         }
       rm_list(chan->ppl, &destroy_peer);
+      destroy_cir_buf(chan->buff);
       free(chan);
     }
 }
