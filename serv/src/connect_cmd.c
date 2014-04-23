@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:07:56 2014
-** Last update Wed Apr 23 01:22:15 2014 
+** Last update Wed Apr 23 01:22:15 2014
 */
 
 #include "server.h"
@@ -21,18 +21,18 @@ void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
   while (tmp)
     {
       if (!strcmp(((t_peer *)tmp->data)->nick, nick))
-	{
-	  peer->towrite = strdup("This nickname is already taking\n");
-	  free(nick);
-	  return ;
-	}
+        {
+          add_buff(peer->towrite, "This nickname has already been took\n");
+          free(nick);
+          return ;
+        }
       tmp = tmp->next;
     }
   if ((peer->towrite = malloc(44 + strlen(nick) + strlen(peer->nick))) == NULL)
     return ;
   snprintf(peer->towrite, 44 + strlen(nick) + strlen(peer->nick),
-	   "Your nickname was succefully change (%s -> %s)\n",
-	   ((peer->nick) ? peer->nick : "nothing"), nick);
+           "Your nickname was succefully change (%s -> %s)\n",
+           ((peer->nick) ? peer->nick : "nothing"), nick);
   free(peer->nick);
   if ((peer->nick = strdup(nick)) == NULL)
     return ;
@@ -52,7 +52,7 @@ void	list_cmd(char *cmd, t_peer *peer, t_server *serv)
   while (tmp && tmp[i])
     {
       if (!*arg1 || strstr(arg1, tmp[i]->name) != NULL)
-	printf("CHAN = %s\n", tmp[i]->name);
+        printf("CHAN = %s\n", tmp[i]->name);
       ++i;
     }
   free(arg1);
@@ -84,6 +84,6 @@ void	part_cmd(char *cmd, t_peer *peer, t_server *serv)
   if ((peer->towrite = malloc(24 + strlen(peer->chan->name))) == NULL)
     return ;
   snprintf(peer->towrite, 23 + strlen(peer->chan->name),
-	   "You left the channel %s\n", peer->chan->name);
+           "You left the channel %s\n", peer->chan->name);
   rm_ppl_chan(peer, serv);
 }

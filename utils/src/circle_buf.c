@@ -23,7 +23,8 @@ t_circle_buf	*create_cir_buf(int size)
     }
   memset(res->basptr, size, 0);
   res->size = size;
-  res->mpos = 0;
+  res->rpos = 0;
+  res->wpos = 0;
   return (res);
 }
 
@@ -53,11 +54,11 @@ void	add_buff(t_circle_buf *b, char *buff)
   i = 0;
   while (buff[i])
     {
-      b->basptr[(i + b->mpos) % b->size] = buff[i];
+      b->basptr[(i + b->wpos) % b->size] = buff[i];
       i++;
     }
-  b->basptr[(i + b->mpos) % b->size] = '\0';
-  b->mpos += i;
+  b->basptr[(i + b->wpos) % b->size] = '\0';
+  b->wpos += i;
 }
 
 void		destroy_cir_buf(void *c)

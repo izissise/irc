@@ -8,6 +8,7 @@
 ** Last update Sat May 18 22:52:41 2013 remi robert
 */
 
+#include "circle_buf.h"
 #include "get_next_line.h"
 
 char	*my_stradd(char *str, char *add, int size_add)
@@ -85,4 +86,21 @@ int	put_next_buff(const int fd, char **str)
       return (1);
     }
   return (0);
+}
+
+int	put_cir_buff(const int fd, t_circle_buf *buf)
+{
+  char	*tmp;
+  char	*rtmp;
+  int	ret;
+  int	diff;
+
+  if ((tmp = strndup_cir_buf(buf, BUFSIZ, buf->rpos)) == NULL)
+    return (-1);
+  rtmp = tmp;
+  ret = put_next_buff(fd, &rtmp);
+  diff = (int)(rtmp - tmp);
+  buf->rpos += diff;
+  free(tmp);
+  return (ret);
 }

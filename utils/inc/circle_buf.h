@@ -19,7 +19,8 @@
 typedef struct	s_circle_buf
 {
   char		*basptr;
-  unsigned int	mpos;
+  unsigned int	wpos;
+  unsigned int	rpos;
   int		size;
 }		t_circle_buf;
 

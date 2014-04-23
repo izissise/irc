@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Wed Apr 23 01:32:23 2014 
+** Last update Wed Apr 23 01:32:23 2014
 */
 
 #ifndef SERVER_H_INCLUDED
@@ -43,13 +43,13 @@ typedef struct	s_peer
   t_gnl		gnl;
   int		cir_pos;
   int		*checkwrite;
-  char		*towrite;
+  t_circle_buf	*towrite;
 }		t_peer;
 
 typedef struct	s_strfunc
 {
-  const char *str;
-  void (*func)();
+  const char	*str;
+  void		(*func)();
 }		t_strfunc;
 
 void	handle_server(t_server *serv);
@@ -79,6 +79,8 @@ void	accept_file_cmd(char *cmd, t_peer *peer, t_server *serv);
 char	*find_first_arg(char *cmd);
 char	*get_second_arg(char *cmd);
 char	*get_first_arg(char *cmd);
+
+int	put_cir_buff(const int fd, t_circle_buf *buf);
 
 char	*format_client_message(char *line, t_peer *client);
 

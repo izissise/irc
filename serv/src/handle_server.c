@@ -20,7 +20,7 @@ void	client_stuff(t_selfd *fd, t_server *serv)
     handle_peer_write(client, serv);
   tmp = (fd->etype == FDREAD) ?
         get_next_line(client->sock->socket, &(client->gnl))
-        : put_next_buff(client->sock->socket, &(client->towrite));
+        : put_cir_buff(client->sock->socket, client->towrite);
   if ((fd->etype == FDREAD) && ((tmp == 1) || (tmp == 2)))
     {
       handle_peer_read(client, serv);
@@ -28,9 +28,7 @@ void	client_stuff(t_selfd *fd, t_server *serv)
     }
   else if ((fd->etype == FDWRITE) && (tmp == 1))
     {
-      //free(client->towrite);
-      client->towrite = NULL;
-      fd->checkwrite = client->towrite ? fd->checkwrite : fd->checkwrite - 1;
+
     }
   if ((tmp == 2) || (tmp == -1))
     {
@@ -104,4 +102,3 @@ void		handle_server(t_server *serv)
         event->callback(event, serv);
     }
 }
-

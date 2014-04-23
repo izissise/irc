@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Wed Apr 23 00:53:48 2014 
+** Last update Wed Apr 23 00:53:48 2014
 */
 
 #include "server.h"
@@ -38,7 +38,7 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
   char	*tmp;
 
   if ((f = commands(peer->gnl.line, cmds,
-		    sizeof(cmds) / sizeof(t_strfunc))) != NULL)
+                    sizeof(cmds) / sizeof(t_strfunc))) != NULL)
     f(peer->gnl.line, peer, serv);
   else if (peer->chan && peer->nick)
     {
@@ -48,17 +48,22 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
       apply_on_list(serv->clients, &set_client_writecheck, NULL);
     }
   else
-    peer->towrite = strdup("Chose a nick and a channel first.\n");
+    add_buff(peer->towrite, "Chose a nick and a channel first.\n");
 }
 
 void	handle_peer_write(t_peer *peer, t_server *serv)
 {
+  char	*ymp;
+
   (void)serv;
   if (peer->chan)
     {
-      if ((peer->towrite = strndup_cir_buf(peer->chan->buff,
-                                           BUFSIZ, peer->cir_pos)))
-        peer->cir_pos += BUFSIZ;
+      if ((ymp = strndup_cir_buf(peer->chan->buff,
+                                 BUFSIZ, peer->cir_pos)))
+        {
+          peer->cir_pos += strlen(ymp);
+          add_buff(peer->towrite , ymp);
+        }
     }
 }
 
@@ -71,6 +76,7 @@ void	destroy_peer(void *p)
       if (pe->chan)
         rm_from_list(&(pe->chan->ppl), find_in_list(pe->chan->ppl, pe),
                      NULL);
+      destroy_cir_buf(pe->towrite);
       close_connection(pe->sock);
     }
   free(pe);
@@ -85,8 +91,11 @@ t_peer	*create_peer(t_net *sock)
   res->sock = sock;
   memset(&(res->gnl), 0, sizeof(t_gnl));
   res->nick = strdup("Ano");
-  res->towrite = NULL;
+  res->towrite = create_cir_buf(CIRSIZE);
   res->chan = NULL;
   res->cir_pos = 0;
+  if (res->towrite == NULL)
+    return (NULL);
   return (res);
 }
+
