@@ -30,9 +30,6 @@ void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
     }
   if ((peer->towrite = malloc(44 + strlen(nick) + strlen(peer->nick))) == NULL)
     return ;
-  snprintf(peer->towrite, 44 + strlen(nick) + strlen(peer->nick),
-           "Your nickname was succefully change (%s -> %s)\n",
-           ((peer->nick) ? peer->nick : "nothing"), nick);
   free(peer->nick);
   if ((peer->nick = strdup(nick)) == NULL)
     return ;
@@ -69,9 +66,7 @@ void		join_cmd(char *cmd, t_peer *peer, t_server *serv)
   if (add_ppl_chan(chan, peer, serv) == -1)
     return ;
   size = 24 + strlen(chan);
-  if ((peer->towrite = malloc(size)) == NULL)
-    return ;
-  snprintf(peer->towrite, size, "Your join the channel %s\n", chan);
+//  snprintf(peer->towrite, size, "Your join the channel %s\n", chan);
   free(chan);
 }
 
@@ -83,7 +78,7 @@ void	part_cmd(char *cmd, t_peer *peer, t_server *serv)
     return ;
   if ((peer->towrite = malloc(24 + strlen(peer->chan->name))) == NULL)
     return ;
-  snprintf(peer->towrite, 23 + strlen(peer->chan->name),
-           "You left the channel %s\n", peer->chan->name);
+//  snprintf(peer->towrite, 23 + strlen(peer->chan->name),
+//           "You left the channel %s\n", peer->chan->name);
   rm_ppl_chan(peer, serv);
 }

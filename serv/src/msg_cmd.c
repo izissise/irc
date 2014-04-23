@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:13:17 2014
-** Last update Wed Apr 23 01:23:22 2014 
+** Last update Wed Apr 23 01:23:22 2014
 */
 
 #include "server.h"
@@ -23,7 +23,7 @@ void		users_cmd(char *cmd, t_peer *peer, t_server *serv)
       printf("%s\n", ((t_peer *)tmp->data)->nick);
       tmp = tmp->next;
     }
-  peer->towrite = strdup("users\n");
+ // peer->towrite = strdup("users\n");
 }
 
 void		msg_cmd(char *cmd, t_peer *peer, t_server *serv)
