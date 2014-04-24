@@ -66,6 +66,7 @@ void		join_cmd(char *cmd, t_peer *peer, t_server *serv)
   if (add_ppl_chan(chan, peer, serv) == -1)
     return ;
   size = 24 + strlen(chan);
+  peer->cir_pos = peer->chan->buff->wpos;
 //  snprintf(peer->towrite, size, "Your join the channel %s\n", chan);
   free(chan);
 }

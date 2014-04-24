@@ -68,8 +68,10 @@ int	put_next_buff(const int fd, char **str)
 {
   int	wrote;
   int	len;
+  int	ret;
 
   len = 0;
+  ret = 0;
   if (str && (*str))
     {
       len = strlen(*str);
@@ -80,12 +82,13 @@ int	put_next_buff(const int fd, char **str)
               perror("write");
               return (-1);
             }
-          (*str) = &((*str)[wrote]);
-          return (0);
+          ret = 0;
         }
-      return (1);
+      else
+        ret = 1;
+      (*str) = &((*str)[wrote]);
     }
-  return (0);
+  return (ret);
 }
 
 int	put_cir_buff(const int fd, t_circle_buf *buf)

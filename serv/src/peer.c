@@ -26,9 +26,7 @@ int		set_client_writecheck(void *c, UNSEDP void *arg)
   t_peer	*client;
 
   if ((client = (t_peer*)c))
-    {
-      *(client->checkwrite) = 2;
-    }
+    (*(client->checkwrite)) = 1;
   return (0);
 }
 
@@ -62,7 +60,7 @@ void	handle_peer_write(t_peer *peer, t_server *serv)
                                  BUFSIZ, peer->cir_pos)))
         {
           peer->cir_pos += strlen(ymp);
-          add_buff(peer->towrite , ymp);
+          add_buff(peer->towrite, ymp);
         }
     }
 }
@@ -98,4 +96,3 @@ t_peer	*create_peer(t_net *sock)
     return (NULL);
   return (res);
 }
-

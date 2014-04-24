@@ -24,7 +24,7 @@ void	client_stuff(t_selfd *fd, t_server *serv)
   if ((fd->etype == FDREAD) && ((tmp == 1) || (tmp == 2)))
     {
       handle_peer_read(client, serv);
-      fd->checkwrite = client->towrite ? fd->checkwrite : fd->checkwrite - 1;
+      fd->checkwrite = 1;
     }
   else if ((fd->etype == FDWRITE) && (tmp == 1))
     fd->checkwrite = 0;
@@ -100,4 +100,3 @@ void		handle_server(t_server *serv)
         event->callback(event, serv);
     }
 }
-
