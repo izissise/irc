@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Mon Apr 21 23:21:34 2014
+## Last update Fri Apr 25 21:22:32 2014 
 ##
 
 SRC		=	handle_server.c \
@@ -15,7 +15,8 @@ SRC		=	handle_server.c \
 			connect_cmd.c \
 			msg_cmd.c \
 			parse_cmd.c \
-			msg.c
+			msg.c \
+			count_char.c
 
 CC		=	gcc
 FILETYPE	=	.c

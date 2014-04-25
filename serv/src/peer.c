@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Wed Apr 23 00:53:48 2014
+** Last update Fri Apr 25 22:20:29 2014 
 */
 
 #include "server.h"
@@ -16,9 +16,7 @@ static t_strfunc cmds[] = {
   {"/join ", join_cmd},
   {"/part ", part_cmd},
   {"/users", users_cmd},
-  {"/msg ", msg_cmd},
-  {"/send_file ", send_file_cmd},
-  {"/accept_file ", accept_file_cmd}
+  {"/msg ", msg_cmd}
 };
 
 int		set_client_writecheck(void *c, UNSEDP void *arg)

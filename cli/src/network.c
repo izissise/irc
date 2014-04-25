@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:30:53 2014
-** Last update Wed Apr 23 00:21:09 2014 
+** Last update Fri Apr 25 20:45:52 2014 
 */
 
 #include <gtk/gtk.h>
@@ -55,30 +55,25 @@ char		connect_cmd(const gchar *cmd, t_window *client)
   return (0);
 }
 
-void	dialog_server(t_window *client, GtkTextBuffer *text_view,
-		      GtkTextIter *it, const gchar *cmd)
+void	dialog_server(t_window *client, const gchar *cmd)
 {
   if (!client->socket)
-    gtk_text_buffer_insert(text_view, it, "You must be connect to chat\n", 28);
+    aff(client, "You must be connect to chat\n", 28);
   else
     dprintf(client->socket->socket, "%s\n", cmd);
 }
 
 void		send_msg(t_window *client)
 {
-  GtkTextBuffer	*text_view;
-  GtkTextIter	it;
   int		ret;
   const gchar	*cmd;
 
   cmd = gtk_entry_get_text(GTK_ENTRY(client->entry));
   if (!cmd || !*cmd)
     return ;
-  text_view = gtk_text_view_get_buffer(GTK_TEXT_VIEW(client->msg));
-  gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
   if (!(ret = connect_cmd(cmd, client)))
-    dialog_server(client, text_view, &it, cmd);
+    dialog_server(client, cmd);
   else if (ret == -1)
-    gtk_text_buffer_insert(text_view, &it, "Error while connection\n", 23);
+    aff(client, "Error while connection\n", 23);
   gtk_entry_set_text(GTK_ENTRY(client->entry), "");
 }

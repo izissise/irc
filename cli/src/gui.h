@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Mon Apr 21 16:31:59 2014 
+** Last update Fri Apr 25 20:45:00 2014 
 */
 
 #ifndef _GUI_H_
@@ -44,5 +44,6 @@ GtkWidget	*init_windows(char *name, int size_x, int size_y);
 GtkTreeModel	*create_completion_model();
 void		set_completion_mod(GtkWidget *entry);
 void		create_gui(GtkWidget *win, t_window *client);
+void		aff(t_window *client, char *str, int size);
 
 #endif /* _GUI_H_ */

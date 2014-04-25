@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Oct  8 16:20:21 2012 hugues morisset
+** Last update Fri Apr 25 22:10:02 2014 
 */
 
 #include "circle_buf.h"
@@ -21,7 +21,7 @@ t_circle_buf	*create_cir_buf(int size)
       free(res);
       return (NULL);
     }
-  memset(res->basptr, size, 0);
+  memset(res->basptr, 0, size);
   res->size = size;
   res->rpos = 0;
   res->wpos = 0;

@@ -5,59 +5,79 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:13:17 2014
-** Last update Wed Apr 23 01:23:22 2014
+** Last update Fri Apr 25 22:44:04 2014 
 */
 
 #include "server.h"
 
-void		users_cmd(char *cmd, t_peer *peer, t_server *serv)
+void		users_cmd(char *cmd, t_peer *peer, UNSEDP t_server *serv)
 {
   t_list	*tmp;
-  char		*str;
+  int		size;
+  char		*msg;
 
   if (strlen(cmd) != 6 || !peer->chan)
     return ;
-  tmp = peer->chan->ppl;
-  while (tmp)
+  if ((size = count_user(peer->chan->ppl)) == 0)
+    add_buff(peer->towrite, "No users in this channel");
+  else if ((msg = malloc(size + 17 + 1)) !=  NULL)
     {
-      printf("%s\n", ((t_peer *)tmp->data)->nick);
-      tmp = tmp->next;
+      tmp = peer->chan->ppl;
+      memset(msg, 0, size + 17 + 1);
+      strncat(msg, "Liste des Users:\n", 17);
+      while (tmp)
+	{
+	  strncat(msg, ((t_peer *)tmp->data)->nick,
+		  strlen(((t_peer *)tmp->data)->nick));
+	  strncat(msg, "\n", 1);
+	  tmp = tmp->next;
+	}
+      add_buff(peer->towrite, msg);
+      free(msg);
     }
- // peer->towrite = strdup("users\n");
 }
 
-void		msg_cmd(char *cmd, t_peer *peer, t_server *serv)
+void		msg_cmd(char *cmd, t_peer *peer, UNSEDP t_server *serv)
 {
   char		*arg1;
   char		*arg2;
   t_list	*tmp;
-  char		*str;
 
-  if ((arg1 = get_first_arg(cmd)) == NULL
-      || (arg2 = get_second_arg(cmd)) == NULL)
+  if ((arg1 = get_first_arg(cmd)) == NULL)
     return ;
+  arg2 = find_first_arg(cmd);
+  arg2 = find_first_arg(arg2);
   tmp = peer->chan->ppl;
   while (tmp)
     {
-      printf ("[%s] [%s]\n", ((t_peer *)tmp->data)->nick, arg1);
       if (!strcmp(((t_peer *)tmp->data)->nick, arg1))
 	{
-	  printf("Find\n");
-	  ((t_peer *)tmp->data)->towrite = strdup(arg2);
-	  peer->towrite = strdup(arg2);
+	  send_private_msg(peer, ((t_peer *)tmp->data), arg2);
+	  free(arg1);
 	  return ;
 	}
       tmp = tmp->next;
     }
-  peer->towrite = strdup("Cannot find this user in this channel\n");
+  free(arg1);
+  add_buff(peer->towrite, "Cannot find this user in this channel\n");
 }
 
-void	send_file_cmd(char *cmd, t_peer *peer, t_server *serv)
+void	list_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
-  peer->towrite = strdup("send_file\n");
-}
+  char		*arg1;
+  char		*msg;
+  int		size;
 
-void	accept_file_cmd(char *cmd, t_peer *peer, t_server *serv)
-{
-  peer->towrite = strdup("accept_file\n");
+  if ((arg1 = get_first_arg(cmd)) == NULL || !peer->chan)
+    return ;
+  if ((size = count_channel(serv->channels, arg1)) == 0)
+    add_buff(peer->towrite, "No room available\n");
+  else if ((msg = malloc(size + 1 + 20)) != NULL)
+    {
+      memset(msg, 0, size + 1 + 20);
+      fill_list_str(msg, serv->channels, arg1);
+      add_buff(peer->towrite, msg);
+      free(msg);
+    }
+  free(arg1);
 }
