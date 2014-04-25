@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Fri Apr 25 22:20:29 2014 
+** Last update Fri Apr 25 22:20:29 2014
 */
 
 #include "server.h"
@@ -38,10 +38,13 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
     f(peer->gnl.line, peer, serv);
   else if (peer->chan && peer->nick)
     {
-      if ((tmp = format_client_message(peer->gnl.line, peer)))
-        add_buff(peer->chan->buff, tmp);
-      free(peer->gnl.line);
-      apply_on_list(serv->clients, &set_client_writecheck, NULL);
+      if (strlen(peer->gnl.line))
+        {
+          if ((tmp = format_client_message(peer->gnl.line, peer)))
+            add_buff(peer->chan->buff, tmp);
+          free(peer->gnl.line);
+          apply_on_list(serv->clients, &set_client_writecheck, NULL);
+        }
     }
   else
     add_buff(peer->towrite, "Chose a nick and a channel first.\n");
