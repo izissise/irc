@@ -5,25 +5,12 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Wed Apr 16 13:24:25 2014
-** Last update Fri Apr 25 21:29:45 2014 
+** Last update Fri Apr 25 23:59:25 2014 
 */
 
 #include <sys/time.h>
 #include <gtk/gtk.h>
 #include "gui.h"
-
-void	aff(t_window *client, char *str, int size)
-{
-  GtkTextBuffer		*text_view;
-  GtkTextIter		it;
-
-  text_view = gtk_text_view_get_buffer(GTK_TEXT_VIEW(client->msg));
-  gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
-  gtk_text_buffer_insert(text_view, &it, str, size);
-  gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(text_view), &it);
-  gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(client->msg),
-			       &it, 0.0, FALSE, 0, 0);
-}
 
 gboolean		time_handler(t_window *client)
 {
@@ -42,8 +29,18 @@ gboolean		time_handler(t_window *client)
       && FD_ISSET(client->socket->socket, &fdset))
     {
       ret = read(client->socket->socket, buf, 1024);
-      aff(client, buf, ret);
+      buf[ret] = 0;
+      print_users(client, buf, ret);
     }
+  return (TRUE);
+}
+
+gboolean	refresh_user(t_window *client)
+{
+  if (!client->socket || client->rq_user)
+    return (TRUE);
+  write(client->socket->socket, "/users\n", 7);
+  client->rq_user = 1;
   return (TRUE);
 }
 
@@ -52,11 +49,14 @@ int		main(int ac, char **av)
   t_window	client;
 
   client.socket = NULL;
+  client.rq_user = 0;
+  client.update_user = 0;
   signal(SIGPIPE, SIG_IGN);
   gtk_init(&ac, &av);
   client.window = init_windows("Gtk Client", 800, 600);
   create_gui(client.window, &client);
-  g_timeout_add(1, (GSourceFunc)time_handler, &client);
+  g_timeout_add(10, (GSourceFunc)time_handler, &client);
+  g_timeout_add(1000, (GSourceFunc)refresh_user, &client);
   gtk_widget_show_all(client.window);
   gtk_main();
   if (client.socket)

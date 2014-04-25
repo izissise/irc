@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Fri Apr 25 20:45:00 2014 
+** Last update Sat Apr 26 00:58:55 2014 
 */
 
 #ifndef _GUI_H_
@@ -18,6 +18,7 @@
 
 # define UNUSED __attribute__((unused))
 # define DEFAULT_PORT "6667"
+# define MAGIC_NB 02
 
 # define GET_PORT(str) ((!str || !(*str)) ? DEFAULT_PORT : str)
 
@@ -28,6 +29,8 @@ typedef	struct	s_window
   GtkWidget	*msg;
   GtkWidget	*other_client;
   t_net		*socket;
+  char		rq_user;
+  char		update_user;
 }		t_window;
 
 void		entry_function(UNUSED GtkEntry *entry, gpointer user_data);
@@ -44,6 +47,10 @@ GtkWidget	*init_windows(char *name, int size_x, int size_y);
 GtkTreeModel	*create_completion_model();
 void		set_completion_mod(GtkWidget *entry);
 void		create_gui(GtkWidget *win, t_window *client);
-void		aff(t_window *client, char *str, int size);
+void		aff(GtkWidget *box, char *str, int size);
+void		clear_aff(GtkWidget *box);
+void		print_users(t_window *client, char *str, int size);
+void		create_dialog_box(t_window *client, char *title,
+				  char **label_name, void (*func)());
 
 #endif /* _GUI_H_ */

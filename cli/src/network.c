@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:30:53 2014
-** Last update Fri Apr 25 20:45:52 2014 
+** Last update Sat Apr 26 00:05:36 2014 
 */
 
 #include <gtk/gtk.h>
@@ -58,7 +58,7 @@ char		connect_cmd(const gchar *cmd, t_window *client)
 void	dialog_server(t_window *client, const gchar *cmd)
 {
   if (!client->socket)
-    aff(client, "You must be connect to chat\n", 28);
+    aff(client->msg,  "You must be connect to chat\n", 28);
   else
     dprintf(client->socket->socket, "%s\n", cmd);
 }
@@ -74,6 +74,6 @@ void		send_msg(t_window *client)
   if (!(ret = connect_cmd(cmd, client)))
     dialog_server(client, cmd);
   else if (ret == -1)
-    aff(client, "Error while connection\n", 23);
+    aff(client->msg, "Error while connection\n", 23);
   gtk_entry_set_text(GTK_ENTRY(client->entry), "");
 }

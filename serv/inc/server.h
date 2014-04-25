@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Fri Apr 25 22:41:39 2014 
+** Last update Fri Apr 25 23:18:15 2014 
 */
 
 #ifndef SERVER_H_INCLUDED
@@ -20,6 +20,8 @@
 # include "liste.h"
 # include "get_next_line.h"
 # include "circle_buf.h"
+
+# define MAGIC_NB 02
 
 typedef struct	s_channel
 {
