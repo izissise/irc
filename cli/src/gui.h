@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Thu Apr 17 18:59:35 2014
-** Last update Sat Apr 26 00:58:55 2014 
+** Last update Sat Apr 26 01:28:27 2014 
 */
 
 #ifndef _GUI_H_
@@ -52,5 +52,9 @@ void		clear_aff(GtkWidget *box);
 void		print_users(t_window *client, char *str, int size);
 void		create_dialog_box(t_window *client, char *title,
 				  char **label_name, void (*func)());
+void		connect_by_dialog(t_window *client, GtkWidget **entry,
+				  GtkWidget *dialog);
+void		join_by_dialog(t_window *client, GtkWidget **entry,
+			       GtkWidget *dialog);
 
 #endif /* _GUI_H_ */
