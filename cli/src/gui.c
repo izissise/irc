@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:32:14 2014
-** Last update Sat Apr 26 15:26:53 2014 
+** Last update Sat Apr 26 13:35:51 2014 Della Maggiora
 */
 
 #include <gtk/gtk.h>
@@ -18,9 +18,9 @@ GtkWidget	*init_windows(char *name, int size_x, int size_y)
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   header = gtk_header_bar_new();
-  gtk_header_bar_set_show_close_button(GTK_HEADER_BAR (header), TRUE);
+  gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header), TRUE);
   gtk_window_set_titlebar(GTK_WINDOW(window), header);
-  gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window),  FALSE);
+  gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window),  TRUE);
   gtk_header_bar_set_title(GTK_HEADER_BAR(header), name);
   gtk_window_set_default_size(GTK_WINDOW(window), size_x, size_y);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
