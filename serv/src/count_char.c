@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 25 21:06:17 2014
-** Last update Fri Apr 25 22:44:27 2014 
+** Last update Sat Apr 26 10:27:50 2014 
 */
 
 #include "server.h"
@@ -59,7 +59,7 @@ int		find_nick(t_peer *peer, t_list *client, char *nick)
   return (0);
 }
 
-void	fill_list_str(void *msg, t_channel **chan, char *name)
+void	fill_list_str(char *msg, t_channel **chan, char *name)
 {
   int	i;
 
@@ -73,5 +73,20 @@ void	fill_list_str(void *msg, t_channel **chan, char *name)
 	  strncat(msg, "\n", 1);
 	}
       ++i;
+    }
+}
+
+void		fill_users_str(char *msg, t_list *client)
+{
+  t_list	*tmp;
+
+  tmp = client;
+  strncat(msg, "Liste des Users:\n", 17);
+  while (tmp)
+    {
+      strncat(msg, ((t_peer *)tmp->data)->nick,
+	      strlen(((t_peer *)tmp->data)->nick));
+      strncat(msg, "\n", 1);
+      tmp = tmp->next;
     }
 }

@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Fri Apr 25 22:41:39 2014 
+** Last update Sat Apr 26 10:29:44 2014 
 */
 
 #ifndef SERVER_H_INCLUDED
@@ -20,6 +20,8 @@
 # include "liste.h"
 # include "get_next_line.h"
 # include "circle_buf.h"
+
+# define MAGIC_NB 02
 
 typedef struct	s_channel
 {
@@ -82,7 +84,8 @@ int		count_channel(t_channel **chan, char *name);
 int		count_user(t_list *clients);
 int		set_client_writecheck(void *c, UNSEDP void *arg);
 void		send_private_msg(t_peer *sender, t_peer *receiver, char *str);
-void		fill_list_str(void *str, t_channel **chan, char *name);
+void		fill_list_str(char *str, t_channel **chan, char *name);
 int		find_nick(t_peer *peer, t_list *client, char *nick);
+void		fill_users_str(char *msg, t_list *client);
 
 #endif /* !SERVER_H_INCLUDED */

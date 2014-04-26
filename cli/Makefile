@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sat Apr 26 14:18:04 2014 Hugues
+## Last update Sat Apr 26 14:19:36 2014 Hugues
 ##
 
 SRC		=	main.c \
@@ -14,7 +14,9 @@ SRC		=	main.c \
 			network.c \
 			dialog_box.c \
 			menu_bar.c \
-			ui.c
+			ui.c \
+			text_view.c \
+			dialog_function.c
 
 CC		=	gcc
 FILETYPE	=	.c

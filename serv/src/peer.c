@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Fri Apr 25 22:20:29 2014
+** Last update Sat Apr 26 10:17:14 2014 
 */
 
 #include "server.h"
@@ -66,7 +66,7 @@ void	handle_peer_write(t_peer *peer, t_server *serv)
     }
 }
 
-void	destroy_peer(void *p)
+void		destroy_peer(void *p)
 {
   t_peer	*pe;
 
@@ -81,7 +81,7 @@ void	destroy_peer(void *p)
   free(pe);
 }
 
-t_peer	*create_peer(t_net *sock)
+t_peer		*create_peer(t_net *sock)
 {
   t_peer	*res;
 
