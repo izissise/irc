@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Sun Apr 20 02:22:48 2014
-** Last update Sun Apr 20 02:31:10 2014 
+** Last update Sat Apr 26 14:53:32 2014 
 */
 
 #include <gtk/gtk.h>
@@ -16,7 +16,7 @@ GtkTreeModel	*create_completion_model()
   int		i;
   GtkListStore	*list;
   GtkTreeIter	it  ;
-  char		*cmd[9];
+  char		*cmd[7];
 
   i = 0;
   cmd[0] = "/server";
@@ -26,10 +26,8 @@ GtkTreeModel	*create_completion_model()
   cmd[4] = "/part";
   cmd[5] = "/users";
   cmd[6] = "/msg";
-  cmd[7] = "/send_file";
-  cmd[8] = "/accept_file";
   list = gtk_list_store_new (1, G_TYPE_STRING);
-  while (i < 9)
+  while (i < 7)
     {
       gtk_list_store_append(list, &it);
       gtk_list_store_set(list, &it, 0, cmd[i], -1);

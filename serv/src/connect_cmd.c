@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:07:56 2014
-** Last update Sat Apr 26 10:17:47 2014 
+** Last update Sat Apr 26 14:38:33 2014 
 */
 
 #include "server.h"
@@ -18,9 +18,9 @@ void	nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
   if ((nick = get_first_arg(cmd)) == NULL
       || find_nick(peer, serv->clients, nick))
     return ;
-  if ((msg = malloc(44 + strlen(nick) + strlen(peer->nick))) == NULL)
+  if ((msg = malloc(45 + strlen(nick) + strlen(peer->nick))) == NULL)
     return ;
-  snprintf(msg, 44 + strlen(nick) + strlen(peer->nick),
+  snprintf(msg, 45 + strlen(nick) + strlen(peer->nick),
            "Your nickname was successfully change (%s -> %s)\n",
            peer->nick, nick);
   add_buff(peer->towrite, msg);
