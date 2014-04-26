@@ -21,7 +21,8 @@ void	nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
   if ((msg = malloc(44 + strlen(nick) + strlen(peer->nick))) == NULL)
     return ;
   snprintf(msg, 44 + strlen(nick) + strlen(peer->nick),
-	   "Your nickname was succefully change (%s -> %s)\n", peer->nick, nick);
+           "Your nickname was successfully change (%s -> %s)\n",
+           peer->nick, nick);
   add_buff(peer->towrite, msg);
   free(peer->nick);
   if ((peer->nick = strdup(nick)) == NULL)

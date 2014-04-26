@@ -42,6 +42,7 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
         {
           if ((tmp = format_client_message(peer->gnl.line, peer)))
             add_buff(peer->chan->buff, tmp);
+          free(tmp);
           free(peer->gnl.line);
           apply_on_list(serv->clients, &set_client_writecheck, NULL);
         }
@@ -50,11 +51,10 @@ void	handle_peer_read(t_peer *peer, t_server *serv)
     add_buff(peer->towrite, "Chose a nick and a channel first.\n");
 }
 
-void	handle_peer_write(t_peer *peer, t_server *serv)
+void	handle_peer_write(t_peer *peer, UNSEDP t_server *serv)
 {
   char	*ymp;
 
-  (void)serv;
   if (peer->chan)
     {
       if ((ymp = strndup_cir_buf(peer->chan->buff,
@@ -62,6 +62,7 @@ void	handle_peer_write(t_peer *peer, t_server *serv)
         {
           peer->cir_pos += strlen(ymp);
           add_buff(peer->towrite, ymp);
+          free(ymp);
         }
     }
 }
@@ -77,6 +78,7 @@ void		destroy_peer(void *p)
                      NULL);
       destroy_cir_buf(pe->towrite);
       close_connection(pe->sock);
+      free(pe->nick);
     }
   free(pe);
 }
