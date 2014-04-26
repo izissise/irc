@@ -5,15 +5,15 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Oct  8 16:20:21 2012 hugues morisset
+** Last update Sat Apr 26 10:16:39 2014 
 */
 
 #include "server.h"
 
-void	client_stuff(t_selfd *fd, t_server *serv)
+void		client_stuff(t_selfd *fd, t_server *serv)
 {
   t_peer	*client;
-  int	tmp;
+  int		tmp;
 
   client = (t_peer*)fd->data;
   if (fd->etype == FDWRITE)
@@ -40,7 +40,7 @@ void	client_stuff(t_selfd *fd, t_server *serv)
 void		close_client_connection(void *d)
 {
   t_selfd	*fd;
-  t_peer		*client;
+  t_peer	*client;
   t_net		*tmp;
   char		*ip;
 
@@ -62,7 +62,7 @@ void		close_client_connection(void *d)
 void		handle_newconnection(t_selfd *fd, t_server *serv)
 {
   t_net		*sock;
-  t_peer		*client;
+  t_peer	*client;
   t_net		*nsock;
   t_selfd	*tmpfd;
   t_net		*tmp;

@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Fri Apr 25 21:34:31 2014 
+** Last update Sat Apr 26 10:18:07 2014 
 */
 
 #include "server.h"
@@ -77,8 +77,8 @@ void		rm_ppl_chan(t_peer *cli, t_server *serv)
 void		destroy_chan(void *c)
 {
   t_channel	*chan;
-  t_list		*tmp;
-  t_peer		*cli;
+  t_list	*tmp;
+  t_peer	*cli;
 
   if ((chan = (t_channel*)c))
     {

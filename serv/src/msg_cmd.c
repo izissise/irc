@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:13:17 2014
-** Last update Sat Apr 26 00:26:06 2014 
+** Last update Sat Apr 26 10:30:43 2014 
 */
 
 #include "server.h"
@@ -22,7 +22,6 @@ void	send_user_list(t_peer *peer, char *str)
 
 void		users_cmd(char *cmd, t_peer *peer, UNSEDP t_server *serv)
 {
-  t_list	*tmp;
   int		size;
   char		*msg;
 
@@ -35,16 +34,8 @@ void		users_cmd(char *cmd, t_peer *peer, UNSEDP t_server *serv)
     send_user_list(peer, "No users in this channel");
   else if ((msg = malloc(size + 19 + 1)) !=  NULL)
     {
-      tmp = peer->chan->ppl;
       memset(msg, 0, size + 17 + 1);
-      strncat(msg, "Liste des Users:\n", 17);
-      while (tmp)
-	{
-	  strncat(msg, ((t_peer *)tmp->data)->nick,
-		  strlen(((t_peer *)tmp->data)->nick));
-	  strncat(msg, "\n", 1);
-	  tmp = tmp->next;
-	}
+      fill_users_str(msg, peer->chan->ppl);
       send_user_list(peer, msg);
       free(msg);
     }
@@ -77,9 +68,9 @@ void		msg_cmd(char *cmd, t_peer *peer, UNSEDP t_server *serv)
 
 void	list_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
-  char		*arg1;
-  char		*msg;
-  int		size;
+  char	*arg1;
+  char	*msg;
+  int	size;
 
   if ((arg1 = get_first_arg(cmd)) == NULL)
     return ;

@@ -5,15 +5,15 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Mon Apr 21 23:07:56 2014
-** Last update Fri Apr 25 22:43:42 2014 
+** Last update Sat Apr 26 10:17:47 2014 
 */
 
 #include "server.h"
 
-void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
+void	nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
-  char		*nick;
-  char		*msg;
+  char	*nick;
+  char	*msg;
 
   if ((nick = get_first_arg(cmd)) == NULL
       || find_nick(peer, serv->clients, nick))
@@ -30,11 +30,11 @@ void		nickname_cmd(char *cmd, t_peer *peer, t_server *serv)
   free(nick);
 }
 
-void		join_cmd(char *cmd, t_peer *peer, t_server *serv)
+void	join_cmd(char *cmd, t_peer *peer, t_server *serv)
 {
-  char		*chan;
-  char		*msg;
-  int		size;
+  char	*chan;
+  char	*msg;
+  int	size;
 
   chan = get_first_arg(cmd);
   if (peer->chan)
