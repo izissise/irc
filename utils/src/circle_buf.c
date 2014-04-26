@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Fri Apr 25 22:10:02 2014 
+** Last update Fri Apr 25 22:10:02 2014
 */
 
 #include "circle_buf.h"
@@ -28,7 +28,8 @@ t_circle_buf	*create_cir_buf(int size)
   return (res);
 }
 
-char		*strndup_cir_buf(t_circle_buf *b, unsigned int n, unsigned int pos)
+char		*strndup_cir_buf(t_circle_buf *b,
+                         unsigned int n, unsigned int pos)
 {
   unsigned int	i;
   char		*res;

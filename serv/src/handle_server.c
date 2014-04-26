@@ -59,14 +59,26 @@ void		close_client_connection(void *d)
   free(fd);
 }
 
+void		log_new_connection(t_net *sock)
+{
+  t_net		*tmp;
+  char		*ip;
+
+  if ((tmp = peer(sock)))
+    {
+      if ((ip = get_ip_addr(tmp)))
+        printf("Client connected from: %s:%d\n", ip, port_number(tmp));
+      free(ip);
+      close_connection(tmp);
+    }
+}
+
 void		handle_newconnection(t_selfd *fd, t_server *serv)
 {
   t_net		*sock;
   t_peer		*client;
   t_net		*nsock;
   t_selfd	*tmpfd;
-  t_net		*tmp;
-  char		*ip;
 
   sock = (t_net*)fd->data;
   if (!(nsock = accept_connection(sock->socket)))
@@ -78,13 +90,7 @@ void		handle_newconnection(t_selfd *fd, t_server *serv)
       free(client);
       return ;
     }
-  if ((tmp = peer(nsock)))
-    {
-      if ((ip = get_ip_addr(tmp)))
-        printf("Client connected from: %s:%d\n", ip, port_number(tmp));
-      free(ip);
-      close_connection(tmp);
-    }
+  log_new_connection(nsock);
   client->checkwrite = &(tmpfd->checkwrite);
   add_to_list(&(serv->watch), tmpfd);
   add_to_list(&(serv->clients), client);

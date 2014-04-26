@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Fri Apr 25 21:22:32 2014 
+## Last update Sat Apr 26 14:18:13 2014 Hugues
 ##
 
 SRC		=	handle_server.c \
@@ -31,7 +31,7 @@ INCDIR		=	inc/
 
 CFLAGS		+=	-I$(INCDIR) -I../utils/inc/
 CFLAGS		+=	-Wall -Wextra -Winit-self
-CFLAGS		+=	-Wunused-function -pipe -Winit-self -g
+CFLAGS		+=	-Wunused-function -pipe -Winit-self
 
 LDFLAGS		+=	-Wl,-O1
 LDFLAGS		+=	-L../utils/ -lutils

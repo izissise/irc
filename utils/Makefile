@@ -5,7 +5,7 @@
 ## Login   <moriss_h@epitech.net>
 ##
 ## Started on  Sun Jun  9 03:35:24 2013 Hugues
-## Last update Sun Apr 20 12:07:46 2014 Hugues
+## Last update Sat Apr 26 14:17:51 2014 Hugues
 ##
 
 SRC		=	clean_tab.c \
@@ -32,7 +32,7 @@ INCDIR		=	inc/
 CFLAGS		+=	-I$(INCDIR)
 CFLAGS		+=	-Wall -Wextra -Winit-self
 CFLAGS		+=	-Wunused-function -pipe -Winit-self
-CFLAGS		+=	-static -g
+CFLAGS		+=	-static
 
 OBJ		=	$(patsubst %${FILETYPE},${OBJDIR}%.o, $(SRC))
 
