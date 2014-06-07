@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Sat Apr 26 10:16:39 2014 
+** Last update Sat Jun  7 17:06:40 2014 Hugues
 */
 
 #include "server.h"
@@ -81,7 +81,7 @@ void		handle_newconnection(t_selfd *fd, t_server *serv)
   t_selfd	*tmpfd;
 
   sock = (t_net*)fd->data;
-  if (!(nsock = accept_connection(sock->socket)))
+  if (!(nsock = accept_connection(sock)))
     return ;
   if ((!(client = create_peer(nsock)))
       || (!(tmpfd = create_fd(nsock->socket, client, &client_stuff))))

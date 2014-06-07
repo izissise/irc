@@ -10,6 +10,7 @@
 
 SRC		=	clean_tab.c \
 			inet_accept.c \
+			inet_asynchronous_connect.c \
 			inet.c \
 			liste.c \
 			liste_find.c \

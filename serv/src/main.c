@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Mon Oct  8 16:20:21 2012 hugues morisset
+** Last update Sat Jun  7 17:06:09 2014 Hugues
 */
 
 #include "server.h"
@@ -93,8 +93,8 @@ int	main(UNSEDP int ac, char **av)
       || !(g_server6 = create_connection(listening(AF_INET6), av[1] ? av[1]
                                          : "6667", SOCK_STREAM, &bind)))
     return (quit_server_err(1));
-  if (listen(g_server4->socket, MAX_CLIENTS) == -1
-      || listen(g_server6->socket, MAX_CLIENTS) == -1)
+  if (listen(g_server4->socket, MAX_QUEUE) == -1
+      || listen(g_server6->socket, MAX_QUEUE) == -1)
     {
       perror("listen");
       return (quit_server_err(1));
