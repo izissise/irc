@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:30:53 2014
-** Last update Sat Apr 26 00:05:36 2014 
+** Last update Sat Jun  7 17:29:05 2014 Hugues
 */
 
 #include <gtk/gtk.h>
@@ -35,6 +35,7 @@ char		connect_cmd(const gchar *cmd, t_window *client)
 {
   const gchar	*port;
   gchar		*ip;
+  int		ret;
 
   if (strlen(cmd) > 8 && !strncmp("/server ", cmd, 8))
     {
@@ -44,13 +45,22 @@ char		connect_cmd(const gchar *cmd, t_window *client)
       	close_connection(client->socket);
       if (!ip || !*ip
 	  || !(client->socket = create_connection(ip, GET_PORT(port),
-						  SOCK_STREAM, &connect)))
+						  SOCK_STREAM, &connect_nb)))
 	{
 	  free(ip);
 	  return (-1);
 	}
       free(ip);
       return (1);
+    }
+  while ((ret = is_connected(client->socket)) != 1)
+    {
+      if (ret == -1)
+	{
+	  client->socket = NULL;
+	return (-1);
+	}
+    printf("Wainting connection.\n");
     }
   return (0);
 }
