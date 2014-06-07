@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Fri Apr 18 13:30:53 2014
-** Last update Sat Jun  7 17:29:05 2014 Hugues
+** Last update Sat Jun  7 20:57:36 2014 Hugues
 */
 
 #include <gtk/gtk.h>
@@ -52,15 +52,6 @@ char		connect_cmd(const gchar *cmd, t_window *client)
 	}
       free(ip);
       return (1);
-    }
-  while ((ret = is_connected(client->socket)) != 1)
-    {
-      if (ret == -1)
-	{
-	  client->socket = NULL;
-	return (-1);
-	}
-    printf("Wainting connection.\n");
     }
   return (0);
 }

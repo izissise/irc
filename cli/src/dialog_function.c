@@ -5,7 +5,7 @@
 ** Login   <dellam_a@epitech.net>
 **
 ** Started on  Sat Apr 26 01:25:25 2014
-** Last update Sat Jun  7 18:53:55 2014 Hugues
+** Last update Sat Jun  7 20:56:33 2014 Hugues
 */
 
 #include <gtk/gtk.h>
@@ -24,15 +24,12 @@ void		connect_by_dialog(t_window *client, GtkWidget **entry,
       !(client->socket = create_connection(ip, GET_PORT(port),
 					   SOCK_STREAM, &connect_nb)))
     display_dialog_error("Connection Problem !", dialog);
-  while ((ret = is_connected(client->socket)) != 1)
-    {
-      if (ret == -1)
-        {
-          client->socket = NULL;
-	  return ;
-        }
-      printf("Waiting connection.\n");
-    }
+  while ((ret = is_connected(client->socket)) == 1)
+    printf("Waiting connection.\n");
+  if (ret == -1)
+    perror("Error on connecting to server: ");
+  else
+    printf("Connection established\n");
 }
 
 void		join_by_dialog(t_window *client, GtkWidget **entry,

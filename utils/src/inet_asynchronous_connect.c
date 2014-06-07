@@ -5,7 +5,7 @@
 ** Login   <moriss_h@epitech.net>
 **
 ** Started on  Mon Oct  8 09:34:29 2012 hugues morisset
-** Last update Sat Jun  7 19:38:08 2014 Hugues
+** Last update Sat Jun  7 20:15:21 2014 Hugues
 */
 
 #include "network.h"
@@ -44,6 +44,9 @@ int	connect_nb(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 
 /*
 ** Check if the socket is connected return quickly
+** return 0 when connection as been established
+** return 1 when it still waiting
+** return -1 in case of error
 */
 
 int			is_connected(t_net *net)
@@ -62,15 +65,14 @@ int			is_connected(t_net *net)
   FD_ZERO(&fdset);
   FD_SET(net->socket, &fdset);
   if ((ret = (select(net->socket + 1, NULL, &fdset, NULL, &tv)) <= 0))
-    return (ret);
-  if ((getsockopt(net->socket, SOL_SOCKET, SO_ERROR, (void*)(&ret),
-                  &len) == -1) || (ret < 0) || getsockname(net->socket,
-                      (struct sockaddr*)(&(net->addr)), &(net->addrlen)) == -1)
+    return ((ret == -1) ? -1 : 1);
+  if ((getsockopt(net->socket, SOL_SOCKET, SO_ERROR, &ret, &len) == -1)
+      || (ret > 0) || getsockname(net->socket,
+                                  (struct sockaddr*)(&(net->addr)),
+                                  &(net->addrlen)) == -1)
     {
-      close_connection(net);
-      if (ret < 0)
-        errno = ret;
+      errno = (ret > 0) ? ret : errno;
       return (-1);
     }
-  return (1);
+  return (0);
 }
